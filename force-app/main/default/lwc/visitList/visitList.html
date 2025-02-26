@@ -1,0 +1,340 @@
+<template>
+    <div class="visit-container">
+        <!-- Add user info at the top -->
+        <div class="user-info" if:true={currentUser}>
+            <div class="slds-text-heading_small slds-p-bottom_small">
+                Visits for: {currentUser}
+            </div>
+        </div>
+
+        <template if:false={selectedVisit}>
+            <!-- List View -->
+            <div class="hide-list-toggle">
+                <lightning-input type="toggle" label="Hide List" checked={hideList} onchange={handleToggleChange}>
+                </lightning-input>
+            </div>
+
+            <template if:false={hideList}>
+                <div class="visit-items">
+                    <template for:each={visits} for:item="visit">
+                        <div key={visit.Id} class={visit.styleClass} onclick={handleVisitClick} data-id={visit.Id}
+                            data-status={visit.Status__c}>
+                            <div class="icon-container">
+                                <lightning-icon icon-name="standard:customer" size="small"></lightning-icon>
+                            </div>
+                            <div class="visit-details">
+                                <div class="store-name">{visit.Customer__r.Name}</div>
+                                <div class="visit-info">
+                                    <div>Visit for: {visit.Visit_for__c}</div>
+                                    <div>Status: {visit.Status__c}</div>
+                                    <template if:true={visit.Status__c}>
+                                        <template if:true={visit.isCompleted}>
+                                            <template if:true={visit.Actual_start_Time__c}>
+                                                <template if:false={visit.isMissed}>
+                                                    <div class="time-info">
+                                                        CheckIn: <lightning-formatted-date-time
+                                                            value={visit.Actual_start_Time__c} year="2-digit"
+                                                            month="2-digit" day="2-digit" hour="2-digit"
+                                                            minute="2-digit" hour12="true">
+                                                        </lightning-formatted-date-time>
+                                                    </div>
+                                                </template>
+                                            </template>
+                                            <template if:true={visit.Actual_End_Time__c}>
+                                                <div class="time-info">
+                                                    CheckOut: <lightning-formatted-date-time
+                                                        value={visit.Actual_End_Time__c} year="2-digit" month="2-digit"
+                                                        day="2-digit" hour="2-digit" minute="2-digit" hour12="true">
+                                                    </lightning-formatted-date-time>
+                                                </div>
+                                            </template>
+                                        </template>
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </template>
+        </template>
+
+        <template if:true={selectedVisit}>
+            <template if:false={showCheckinDetails}>
+                <!-- Existing Detail View -->
+                <div class="visit-detail-screen">
+                    <div class="customer-header">
+                        <div class="header-flex">
+                            <h2>{selectedVisit.Customer__r.Name}</h2>
+                        </div>
+                        <div class="visit-info">
+                            <div>Visit for: {selectedVisit.Visit_for__c}</div>
+                            <div>Status: {selectedVisit.Status__c}</div>
+                            <template if:true={selectedVisit.Actual_start_Time__c}>
+                                <div class="checkin-info">
+                                    <div class="checkin-time">
+                                        Check-In:
+                                        <lightning-formatted-date-time value={selectedVisit.Actual_start_Time__c}
+                                            year="2-digit" month="2-digit" day="2-digit" hour="2-digit" minute="2-digit"
+                                            hour12="true" time-zone="Asia/Kolkata">
+                                        </lightning-formatted-date-time>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                    <div class="primary-buttons">
+                        <template if:true={showCheckinButton}>
+                            <button class="primary-btn checkin-btn" onclick={handleCheckin}>Checkin</button>
+                        </template>
+                        <button class="primary-btn missed-btn" onclick={handleMissed}>Missed</button>
+                        <button class="primary-btn back-btn" onclick={handleBack}>Back to List</button>
+                    </div>
+                </div>
+            </template>
+
+            <template if:true={showCheckinDetails}>
+                <!-- Checkin Summary View -->
+                <div class="visit-detail-screen">
+                    <div class="customer-header">
+                        <div class="header-flex">
+                            <h2>{selectedVisit.Customer__r.Name}</h2>
+                            <button class="back-btn-inside" onclick={handleBackToVisit}>
+                                Back to Visit
+                            </button>
+                        </div>
+                        <div class="visit-info">
+                            <div>Visit for: {selectedVisit.Visit_for__c}</div>
+                            <div>Status: {selectedVisit.Status__c}</div>
+                            <template if:true={selectedVisit.Actual_start_Time__c}>
+                                <div class="checkin-info">
+                                    <div class="checkin-time">
+                                        Check-In:
+                                        <lightning-formatted-date-time value={selectedVisit.Actual_start_Time__c}
+                                            year="2-digit" month="2-digit" day="2-digit" hour="2-digit" minute="2-digit"
+                                            hour12="true" time-zone="Asia/Kolkata">
+                                        </lightning-formatted-date-time>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- Accordion Sections -->
+                    <div class="accordion-section">
+                        <div class="accordion-header" onclick={toggleOverallSummary}>
+                            <lightning-icon icon-name={overallSummaryIcon} size="small" class="accordion-icon">
+                            </lightning-icon>
+                            <span class="header-text">Overall Summary</span>
+                        </div>
+                        <div class={overallSummaryClass}>
+                            <div class="summary-item">
+                                <span class="label">Tot. Sales</span>
+                                <span class="value">₹ {selectedVisit.Total_Sales__c}</span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="label">Avg Sales</span>
+                                <span class="value">₹ {selectedVisit.Average_Sales__c}</span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="label">Cred Bal</span>
+                                <span class="value">₹ {selectedVisit.Credit_Balance__c}</span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="label">Cred Lim</span>
+                                <span class="value">₹ {selectedVisit.Credit_Limit__c}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-section">
+                        <div class="accordion-header" onclick={toggleLastVisit}>
+                            <lightning-icon icon-name={lastVisitIcon} size="small" class="accordion-icon">
+                            </lightning-icon>
+                            <span class="header-text">Last Visit Summary</span>
+                        </div>
+                    </div>
+
+                    <div class="accordion-section">
+                        <div class="accordion-header" onclick={toggleCurrentVisit}>
+                            <lightning-icon icon-name={currentVisitIcon} size="small" class="accordion-icon">
+                            </lightning-icon>
+                            <span class="header-text">Current Visit Summary</span>
+                        </div>
+                    </div>
+
+                    <div class="accordion-section">
+                        <div class="accordion-header" onclick={toggleChecklist}>
+                            <lightning-icon icon-name={checklistIcon} size="small" class="accordion-icon">
+                            </lightning-icon>
+                            <span class="header-text">Checklist</span>
+                        </div>
+                    </div>
+
+                    <div class="comments-section">
+                        <label>Comments for the visit: <span style="color: red;">*</span></label>
+                        <textarea class="comments-input" value={visitComments} onchange={handleCommentsChange}
+                            placeholder="Please enter visit comments (required)" required></textarea>
+                        <template if:true={showCommentError}>
+                            <div class="error-message" style="color: red; font-size: 0.8rem;">
+                                Please enter comments before checking out
+                            </div>
+                        </template>
+                    </div>
+
+                    <div class="action-buttons-container">
+                        <button class="action-btn" onclick={handleInvoiceClick}>Invoice</button>
+                        <button class="action-btn" onclick={handleStockClick}>Stock</button>
+                        <button class="action-btn" onclick={handleTicketClick}>Ticket</button>
+                        <button class="action-btn" onclick={handlePaymentFollowupClick}>Payment Followup</button>
+                        <button class="action-btn" onclick={handleOutStandingClick}>Outstanding</button>
+                        <button class="action-btn" onclick={handleCompetitorClick}>Competitor</button>
+                    </div>
+
+                    <div class="photo-container">
+                        <div class="image-upload-container">
+                            <!-- Loading Spinner -->
+                            <template if:true={isUploading}>
+                                <div class="spinner-container">
+                                    <lightning-spinner alternative-text="Uploading..." size="small"></lightning-spinner>
+                                    <div class="upload-text">Uploading photo...</div>
+                                </div>
+                            </template>
+
+                            <!-- Success Message -->
+                            <template if:true={showUploadSuccess}>
+                                <div class="success-message">
+                                    <lightning-icon icon-name="utility:success" size="small"
+                                        variant="success"></lightning-icon>
+                                    <span>Photo uploaded successfully!</span>
+                                </div>
+                            </template>
+
+                            <div class="upload-btn-wrapper">
+                                <button class="upload-btn" onclick={handleCaptureClick} disabled={isUploading}>
+                                    <lightning-icon icon-name="utility:image" size="small"
+                                        class="icon"></lightning-icon>
+                                    Take Photo
+                                </button>
+                                <input type="file" accept="image/*" capture="environment" onchange={handleFileChange}
+                                    class="file-input" disabled={isUploading} />
+                            </div>
+
+                            <!-- Preview container -->
+                            <template if:true={imageUrl}>
+                                <div class="preview-container">
+                                    <img src={imageUrl} class="preview-image" alt="Captured photo" />
+                                    <button class="remove-btn" onclick={handleRemovePhoto} disabled={isUploading}>
+                                        <lightning-icon icon-name="utility:close" size="small"></lightning-icon>
+                                    </button>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+
+                    <div class="checkout-container">
+                        <!-- Loading Spinner for Checkout -->
+                        <template if:true={isCheckingOut}>
+                            <div class="spinner-container">
+                                <lightning-spinner alternative-text="Processing checkout..."
+                                    size="small"></lightning-spinner>
+                                <div class="upload-text">Processing checkout...</div>
+                            </div>
+                        </template>
+
+                        <button class="checkout-btn" onclick={handleCheckout} disabled={isCheckingOut}>
+                            Checkout
+                        </button>
+                    </div>
+                </div>
+            </template>
+
+            <!-- Add Missed Visit Modal inside your existing template -->
+            <template if:true={showMissedModal}>
+                <div class="modal-backdrop">
+                    <div class="modal-container">
+                        <div class="modal-header">
+                            <h2>Missed Visit</h2>
+                            <button class="close-button" onclick={handleMissedCancel}>
+                                <span>×</span>
+                            </button>
+                        </div>
+
+                        <div class="modal-content">
+                            <div class="form-group">
+                                <label>Distributor</label>
+                                <input type="text" value={selectedVisit.Customer__r.Name} disabled
+                                    class="form-input disabled" />
+                            </div>
+
+                            <div class="form-group">
+                                <label>
+
+                                    Rescheduled Date
+                                </label>
+                                <input type="date" class="form-input" value={rescheduleDate}
+                                    onchange={handleRescheduleDateChange} />
+                            </div>
+
+                            <div class="form-group">
+                                <label>
+
+                                    Missed Reason
+                                </label>
+                                <textarea class="form-textarea" value={missedReason}
+                                    onchange={handleMissedReasonChange}></textarea>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button class="btn-cancel" onclick={handleMissedCancel}>Cancel</button>
+                            <button class="btn-save" onclick={handleMissedSave}>Save</button>
+                        </div>
+                    </div>
+                </div>
+            </template>
+
+            <template if:true={showTicketCreation}>
+                <c-ticket-creation distributor-name={selectedVisit.Customer__r.Name}
+                    account-id={selectedVisit.Customer__c} oncancel={handleTicketCancel} onsave={handleTicketSave}>
+                </c-ticket-creation>
+            </template>
+
+            <template if:true={showPaymentFollowup}>
+                <c-payment-followup distributor-name={selectedVisit.Customer__r.Name}
+                    account-id={selectedVisit.Customer__c} oncancel={handlePaymentFollowupCancel}
+                    onsave={handlePaymentFollowupSave}>
+                </c-payment-followup>
+            </template>
+
+            <!-- Stock Creation Modal -->
+            <template if:true={showStockCreation}>
+                <c-stock-creation distributor-name={selectedVisit.Customer__r.Name}
+                    account-id={selectedVisit.Customer__c} oncancel={handleStockCreationCancel}
+                    onsave={handleStockCreationSave} visit={visitRecord} selected-visit={selectedVisit}>
+                </c-stock-creation>
+            </template>
+
+            <!-- Add this near your other modal components -->
+            <template if:true={showInvoiceCreation}>
+                <c-invoice-creation distributor-name={selectedVisit.Customer__r.Name}
+                    account-id={selectedVisit.Customer__c} oncancel={handleInvoiceCancel} onsave={handleInvoiceSave}>
+                </c-invoice-creation>
+            </template>
+
+            <template if:true={showCompetitorCreation}>
+                <c-competitor-form distributor-name={selectedVisit.Customer__r.Name} formatted-date={formattedDate}
+                    oncancel={handleCompetitorCancel} onsave={handleCompetitorSave}>
+                </c-competitor-form>
+            </template>
+
+            <template if:true={showOutStandingCreation}>
+                <c-outstanding-details distributor-name={selectedVisit.Customer__r.Name} formatted-date={formattedDate}
+                    oncancel={handleOutStandingCancel}>
+                </c-outstanding-details>
+            </template>
+
+
+
+        </template>
+    </div>
+</template>

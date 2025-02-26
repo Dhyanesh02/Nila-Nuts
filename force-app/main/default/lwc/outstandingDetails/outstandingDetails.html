@@ -1,0 +1,141 @@
+<template>
+  <div class="modal-backdrop">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h2 class="header-title">Outstanding Details</h2>
+      </div>
+
+      <div class="modal-form">
+        <template if:true={error}>
+          <div class="error-message">{error}</div>
+        </template>
+
+        <div class="form-group">
+          <label>Distributor Name:</label>
+          <div class="field-value">{distributorName}</div>
+        </div>
+
+        <div class="form-group">
+          <label>Date:</label>
+          <div class="field-value">{formattedDate}</div>
+        </div>
+
+        <div class="form-group">
+          <label>Total Outstanding:</label>
+          <div class="field-value">
+            <lightning-formatted-number value={totalOutstanding} format-style="currency" currency-code="INR">
+            </lightning-formatted-number>
+          </div>
+        </div>
+
+        <div class="table-container">
+          <table class="records-table">
+            <thead>
+              <tr>
+                <th>Invoice Number</th>
+                <th>Pending Amount</th>
+                <th>Aging (Days)</th>
+                <th>Due Date</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <template for:each={outstandingRecords} for:item="record">
+                <tr key={record.voucherNumber}>
+                  <td>
+                    <a href="#" onclick={handleInvoiceClick} data-id={record.voucherNumber} class="invoice-link">
+                      {record.voucherNumber}
+                    </a>
+                  </td>
+                  <td>
+                    <lightning-formatted-number value={record.pendingAmount} format-style="currency"
+                      currency-code="INR">
+                    </lightning-formatted-number>
+                  </td>
+                  <td>{record.aging}</td>
+                  <td class={record.dueDateClass}>
+                    <lightning-formatted-date-time value={record.dueDate} day="2-digit" month="2-digit" year="numeric">
+                    </lightning-formatted-date-time>
+                  </td>
+                  <td>
+                    <button class="payment-button" onclick={openPaymentModal} data-invoice={record.voucherNumber}
+                      data-amount={record.pendingAmount}>
+                      Pay
+                    </button>
+                  </td>
+                </tr>
+              </template>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="button-group">
+          <button class="go-back-btn" onclick={handleGoBack}>Go Back</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Payment Modal -->
+  <template if:true={showPaymentModal}>
+    <div class="payment-modal-wrapper">
+      <div class="payment-modal">
+        <div class="payment-modal-header">
+          <h2>New Payment</h2>
+        </div>
+        <div class="payment-modal-content">
+          <div class="form-group">
+            <label>Amount<span class="required-star">*</span></label>
+            <lightning-input type="number" placeholder="Enter payment amount" value={paymentAmount} required
+              onchange={handleAmountChange}>
+            </lightning-input>
+          </div>
+
+
+          <lightning-combobox label="Payment Mode" variant="label-inline" label-class="label-with-required"
+            value={paymentMode} options={paymentModeOptions} required onchange={handlePaymentModeChange}>
+          </lightning-combobox>
+
+          <!-- Card Details Section -->
+          <template if:true={showCardFields}>
+            <lightning-input type="number" label="Card Number" variant="label-inline" label-class="label-with-required"
+              placeholder="Enter card number" value={cardNumber} required maxlength="16" minlength="16"
+              onchange={handleCardNumberChange}>
+            </lightning-input>
+
+            <lightning-combobox label="Card Type" variant="label-inline" label-class="label-with-required"
+              value={cardType} options={cardTypeOptions} required onchange={handleCardTypeChange}>
+            </lightning-combobox>
+
+            <div class="card-details-row">
+              <lightning-input type="number" label="CVV" variant="label-inline" label-class="label-with-required"
+                placeholder="CVV" value={cvv} required maxlength="3" minlength="3" class="cvv-input"
+                onchange={handleCvvChange}>
+              </lightning-input>
+
+              <lightning-input type="date" label="Expiration Date" variant="label-inline"
+                label-class="label-with-required" value={expirationDate} required onchange={handleExpirationDateChange}>
+              </lightning-input>
+            </div>
+          </template>
+
+          <!-- Online Transfer Field -->
+          <template if:true={showTransactionField}>
+            <lightning-input type="text" label="Transaction ID" variant="label-inline" label-class="label-with-required"
+              placeholder="Enter transaction ID" value={transactionId} required onchange={handleTransactionIdChange}>
+            </lightning-input>
+          </template>
+        </div>
+        <div class="payment-modal-footer">
+          <button class="action-btn cancel-btn" onclick={closePaymentModal}>
+            Cancel
+          </button>
+          <button class="action-btn save-btn" onclick={handlePaymentSave}>
+            Save
+          </button>
+        </div>
+      </div>
+      <div class="payment-modal-backdrop"></div>
+    </div>
+  </template>
+</template>

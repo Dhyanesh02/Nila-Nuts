@@ -1,0 +1,84 @@
+<template>
+    <div class="ticket-container">
+      <div class="ticket-header">
+        COMPETITOR
+      </div>
+  
+      <div class="ticket-form">
+        <div class="form-group">
+          <label>Distributor Name:</label>
+          <div class="field-value">{distributorName}</div>
+        </div>
+  
+        <div class="form-group">
+          <label>Ticket Date:</label>
+          <div class="field-value">{formattedDate}</div>
+        </div>
+  
+        <div class="form-group">
+          <label class="required">Product Category</label>
+          <input type="text" class="form-control" name="productCategory" onchange={handleInputChange} required />
+        </div>
+  
+        <div class="form-group">
+          <label class="required">Competitor Name</label>
+          <input type="text" class="form-control" name="competitorName" onchange={handleInputChange} required />
+        </div>
+  
+        <div class="form-group">
+          <label>Display Board</label>
+          <select class="form-control" name="displayBoard" onchange={handleInputChange}>
+            <template for:each={displayBoardOptions} for:item="option">
+              <option key={option.value} value={option.value}>{option.label}</option>
+            </template>
+          </select>
+        </div>
+  
+        <div class="form-group">
+          <label>Product</label>
+          <input type="text" class="form-control" name="product" onchange={handleInputChange} />
+        </div>
+  
+        <div class="form-group">
+          <label>Special Offers on Going</label>
+          <select class="form-control" name="specialOffers" onchange={handleInputChange}>
+            <template for:each={specialOffersOptions} for:item="option">
+              <option key={option.value} value={option.value}>{option.label}</option>
+            </template>
+          </select>
+        </div>
+  
+        <div class="form-group">
+          <label>Special Offer Details</label>
+          <textarea class="form-control" name="specialOfferDetails" onchange={handleInputChange}>
+          </textarea>
+        </div>
+  
+        <div class="form-group">
+          <!-- <label>Upload Competitor Product Image</label> -->
+          <div class="image-upload-section">
+            <template if:false={hasUploadedImage}>
+              <lightning-file-upload label="Upload Competitor Product Image" name="fileUploader" accept={acceptedFormats}
+                record-id={recordId} onuploadfinished={handleUploadFinished} multiple="false">
+              </lightning-file-upload>
+            </template>
+  
+            <template if:true={hasUploadedImage}>
+              <div class="image-preview-container">
+                <img src={imageUrl} alt="Uploaded image" class="preview-image" />
+                <button class="cancel-image-btn" onclick={handleCancelImage}>
+                  <lightning-icon icon-name="utility:close" size="small" class="cancel-icon"></lightning-icon>
+                  Cancel Image
+                </button>
+              </div>
+            </template>
+          </div>
+        </div>
+  
+        <div class="button-group">
+          <button class="cancel-btn" onclick={handleCancel}>Cancel</button>
+          <button class="save-btn" onclick={handleSave}>Save</button>
+        </div>
+      </div>
+    </div>
+  </template>

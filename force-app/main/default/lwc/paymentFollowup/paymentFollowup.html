@@ -1,0 +1,39 @@
+<template>
+    <div class="ticket-container">
+        <div class="ticket-header">
+            NEW PAYMENT FOLLOWUP
+        </div>
+
+        <div class="ticket-form">
+            <div class="form-group">
+                <label>Distributor Name:</label>
+                <div class="field-value">{distributorName}</div>
+            </div>
+
+            <div class="form-group">
+                <label>Creation Date:</label>
+                <div class="field-value">{formattedDate}</div>
+            </div>
+
+            <div class="form-group">
+                <label class="required">Expected Amount</label>
+                <input type="number" class="form-control" onchange={handleAmountChange} required />
+            </div>
+
+            <div class="form-group">
+                <label class="required">Expected Payment Date</label>
+                <input type="date" min = {minDate} class="form-control" onchange={handleDateChange} required  />
+            </div>
+
+            <div class="form-group">
+                <label class="required">Comments</label>
+                <textarea class="form-control" onchange={handleCommentsChange} required></textarea>
+            </div>
+
+            <div class="button-group">
+                <button class="cancel-btn" onclick={handleCancel}>Cancel</button>
+                <button class="save-btn" onclick={handleSave}>Save</button>
+            </div>
+        </div>
+    </div>
+</template>

@@ -1,0 +1,79 @@
+<template>
+    <div class="team-visit-container">
+        <!-- Filters -->
+        <div class="filters-section">
+            <div class="slds-grid slds-gutters slds-grid_vertical-align-end">
+                <div class="slds-col">
+                    <lightning-input 
+                        type="date" 
+                        label="Select Date" 
+                        value={selectedDate}
+                        onchange={handleDateChange}
+                        class="date-input">
+                    </lightning-input>
+                </div>
+                <div class="slds-col">
+                    <lightning-combobox
+                        label="Select Executive"
+                        value={selectedOwner}
+                        options={ownerOptions}
+                        onchange={handleOwnerChange}>
+                    </lightning-combobox>
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary -->
+        <div class="summary-section">
+            <div class="summary-item">
+                <span>Completed:</span>
+                <div class="count-badge completed">{completedVisits}</div>
+            </div>
+            <div class="summary-item">
+                <span>In Progress:</span>
+                <div class="count-badge inprogress">{inProgressVisits}</div>
+            </div>
+            <div class="summary-item">
+                <span>Planned:</span>
+                <div class="count-badge planned">{plannedVisits}</div>
+            </div>
+            <div class="summary-item">
+                <span>Missed:</span>
+                <div class="count-badge missed">{missedVisits}</div>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="content-section">
+            <!-- Visits List -->
+            <div class="visits-section">
+                <template if:true={isLoading}>
+                    <lightning-spinner size="small"></lightning-spinner>
+                </template>
+                <template for:each={visits} for:item="visit">
+                    <div key={visit.Id} 
+                         class="visit-tile"
+                         data-id={visit.Id}
+                         data-status={visit.Status__c}
+                         onclick={handleVisitClick}>
+                        <div class="visit-name">{visit.Customer__r.Name}</div>
+                        <div class="visit-status-badge" data-status={visit.Status__c}>
+                            {visit.Status__c}
+                        </div>
+                    </div>
+                </template>
+            </div>
+
+            <!-- Map -->
+            <div class="map-container">
+                <lightning-map
+                    map-markers={mapMarkers}
+                    center={mapCenter}
+                    zoom-level={zoomLevel}
+                    markers-title="Visit Locations"
+                    list-view="hidden">
+                </lightning-map>
+            </div>
+        </div>
+    </div>
+</template>

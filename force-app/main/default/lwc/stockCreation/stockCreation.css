@@ -1,0 +1,174 @@
+.stock-creation-container {
+    padding: 0.5rem;
+}
+
+.field-spacing {
+    margin-bottom: 0.75rem;
+}
+
+.button-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid #dddbda;
+}
+
+.slds-card {
+    background: white;
+    border: none;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+.slds-card__header {
+    padding: 0.75rem 1rem;
+    margin: 0;
+    background: #f3f3f3;
+}
+
+.slds-card__body_inner {
+    padding: 1rem;
+}
+
+.slds-form__row {
+    margin-bottom: 1rem;
+}
+
+lightning-input,
+lightning-combobox,
+lightning-textarea {
+    --slds-c-input-color-border: #dddbda;
+    --slds-c-input-radius-border: 4px;
+}
+
+.slds-text-heading_small {
+    font-weight: 600;
+    color: #444;
+}
+
+.slds-modal__container {
+    max-width: 70rem !important;
+    width: 40% !important;
+}
+
+.slds-modal__content {
+    overflow: initial;
+}
+
+:host {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.ticket-container {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 500px;
+    margin: 20px;
+    animation: slideIn 0.2s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.ticket-header {
+    background: #0176d3;
+    color: white;
+    padding: 12px 16px;
+    border-radius: 8px 8px 0 0;
+    text-align: center;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.ticket-form {
+    padding: 16px;
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    display: flex;
+    align-items: center;
+    font-size: 13px;
+    color: #444;
+    margin-bottom: 4px;
+}
+
+.required{
+    color: red;
+    margin-left: 4px;
+}
+
+.field-value {
+    padding: 8px;
+    background: #f8f8f8;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #d8dde6;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+textarea.form-control {
+    min-height: 80px;
+    resize: vertical;
+}
+
+.button-group {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.cancel-btn,
+.save-btn {
+    padding: 8px 24px;
+    border-radius: 4px;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    min-width: 80px;
+}
+
+.cancel-btn {
+    background: #f3f3f3;
+    color: #444;
+}
+
+.save-btn {
+    background: #0176d3;
+    color: white;
+}
+
+.cancel-btn:hover,
+.save-btn:hover {
+    opacity: 0.9;
+}

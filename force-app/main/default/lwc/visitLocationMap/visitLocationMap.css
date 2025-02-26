@@ -1,0 +1,40 @@
+.map-container {
+    height: 200px;
+    position: relative;
+    max-width: 300px;
+    margin: 0;
+    margin-left: 16px;
+}
+
+.legend {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    background: white;
+    padding: 6px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    font-size: 10px;
+    z-index: 1000;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    margin: 3px 0;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 6px;
+}
+
+.checkin {
+    background-color: #4285F4;
+}
+
+.checkout {
+    background-color: #EA4335;
+}

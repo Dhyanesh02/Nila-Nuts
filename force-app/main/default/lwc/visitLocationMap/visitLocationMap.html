@@ -1,0 +1,19 @@
+<template>
+    <div class="map-container">
+      <template if:true={mapMarkers}>
+        <lightning-map map-markers={mapMarkers} zoom-level={zoomLevel} list-view={listView}>
+        </lightning-map>
+      </template>
+  
+      <div class="legend">
+        <div class="legend-item">
+          <span class="dot checkin"></span>
+          <span>Check-in</span>
+        </div>
+        <div class="legend-item">
+          <span class="dot checkout"></span>
+          <span>Check-out</span>
+        </div>
+      </div>
+    </div>
+  </template>

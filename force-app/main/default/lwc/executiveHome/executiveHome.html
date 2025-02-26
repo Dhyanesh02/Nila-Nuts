@@ -1,0 +1,203 @@
+<template>
+    <template if:true={isPageLoading}>
+        <div class="loading-overlay">
+            <div class="loading-spinner">
+                <div class="spinner-container">
+                    <div class="spinner"></div>
+                </div>
+                <div class="loading-text">Loading...</div>
+            </div>
+        </div>
+    </template>
+
+    <template if:true={showRefreshAnimation}>
+        <div class="refresh-overlay">
+            <div class="refresh-spinner">
+                <div class="spinner-container">
+                    <div class="spinner"></div>
+                </div>
+                <div class="refresh-text">Refreshing...</div>
+            </div>
+        </div>
+    </template>
+
+    <div class="container">
+        <!-- Main Menu View -->
+        <template if:true={showMainMenu}>
+            <!-- Logo Section -->
+            <div class="logo-section">
+                <img src={logo} alt="Nila Logo" class="logo">
+            </div>
+
+            <!-- Start/End Day Section -->
+            <div class="day-control-section">
+                <template if:false={dayStarted}>
+                    <template if:false={showOdoForm}>
+                        <button class="start-day-btn" onclick={handleStartDay}>Start Day</button>
+                    </template>
+
+                    <template if:true={showOdoForm}>
+                        <div class="modal-backdrop"></div>
+                        <div class="custom-modal">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <lightning-icon icon-name="utility:checkin" size="small"
+                                        class="odo-icon"></lightning-icon>
+                                    <h2>Start Day ODO Reading</h2>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <label>ODO Kms</label>
+                                        <input type="number" class="odo-input" placeholder="Enter ODO reading"
+                                            onchange={handleOdoChange} min="0" step="1" required />
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Working with</label>
+                                        <select class="odo-input" onchange={handleWorkingWithChange} required>
+                                            <option value="">Select...</option>
+                                            <option value="RM">RM</option>
+                                            <option value="ZM">ZM</option>
+                                            <option value="TM">TM</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="image-upload-center">
+                                            <label for="file-upload" class="capture-btn">
+                                                <svg class="camera-icon" viewBox="0 0 24 24">
+                                                    <path
+                                                        d="M12 15.2C13.7673 15.2 15.2 13.7673 15.2 12C15.2 10.2327 13.7673 8.8 12 8.8C10.2327 8.8 8.8 10.2327 8.8 12C8.8 13.7673 10.2327 15.2 12 15.2Z" />
+                                                    <path
+                                                        d="M9 3L7.17 5H4C2.9 5 2 5.9 2 7V19C2 20.1 2.9 21 4 21H20C21.1 21 22 20.1 22 19V7C22 5.9 21.1 5 20 5H16.83L15 3H9ZM12 17C9.24 17 7 14.76 7 12C7 9.24 9.24 7 12 7C14.76 7 17 9.24 17 12C17 14.76 14.76 17 12 17Z" />
+                                                </svg>
+                                                <span>{captureButtonLabel}</span>
+                                            </label>
+                                            <input type="file" id="file-upload" accept="image/*" capture="environment"
+                                                onchange={handleImageUpload} class="file-input-hidden" />
+                                        </div>
+                                        <template if:true={imageUrl}>
+                                            <div class="image-preview-container">
+                                                <img src={imageUrl} alt="ODO Meter" class="preview-image" />
+                                            </div>
+                                        </template>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="cancel-btn" onclick={handleCancelStartDay}>Cancel</button>
+                                    <button class="submit-btn" onclick={handleSubmit} disabled={isLoading}>
+                                        {submitButtonLabel}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </template>
+
+                <template if:true={dayStarted}>
+                    <button class="end-day-btn" onclick={handleEndDay}>End Day</button>
+                </template>
+            </div>
+        </template>
+
+        <!-- My Visit View -->
+        <template if:true={showMyVisit}>
+            <div class="my-visit-container">
+                <!-- Back button -->
+                <div class="back-button-container">
+                    <lightning-button-icon icon-name="utility:back" variant="border-filled" onclick={handleBack}
+                        alternative-text="Back" class="back-button">
+                    </lightning-button-icon>
+                </div>
+
+                <!-- My Visit components -->
+                <c-my-visit1 ondayended={handleDayEnded}></c-my-visit1>
+                <c-visit-list></c-visit-list>
+            </div>
+        </template>
+
+        <!-- End ODO Modal -->
+        <template if:true={showEndOdoModal}>
+            <div class="modal-backdrop"></div>
+            <div class="custom-modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <lightning-icon icon-name="utility:checkin" size="small" class="odo-icon"></lightning-icon>
+                        <h2>End Day ODO Reading</h2>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <input type="number" class="odo-input" placeholder="Enter ODO reading"
+                                onchange={handleEndOdoChange} min="0" step="1" required />
+                        </div>
+
+                        <div class="form-group">
+                            <div class="image-section">
+                                <div class="image-upload-center">
+                                    <label for="end-file-upload" class="capture-btn" disabled={isEndImageLoading}>
+                                        <template if:false={isEndImageLoading}>
+                                            <svg class="camera-icon" viewBox="0 0 24 24">
+                                                <path
+                                                    d="M12 15.2C13.7673 15.2 15.2 13.7673 15.2 12C15.2 10.2327 13.7673 8.8 12 8.8C10.2327 8.8 8.8 10.2327 8.8 12C8.8 13.7673 10.2327 15.2 12 15.2Z" />
+                                                <path
+                                                    d="M9 3L7.17 5H4C2.9 5 2 5.9 2 7V19C2 20.1 2.9 21 4 21H20C21.1 21 22 20.1 22 19V7C22 5.9 21.1 5 20 5H16.83L15 3H9ZM12 17C9.24 17 7 14.76 7 12C7 9.24 9.24 7 12 7C14.76 7 17 9.24 17 12C17 14.76 14.76 17 12 17Z" />
+                                            </svg>
+                                            <span>{endCaptureButtonLabel}</span>
+                                        </template>
+                                        <template if:true={isEndImageLoading}>
+                                            <span>Processing...</span>
+                                        </template>
+                                    </label>
+                                    <input type="file" id="end-file-upload" accept="image/*" capture="environment"
+                                        onchange={handleEndImageUpload} class="file-input-hidden"
+                                        disabled={isEndImageLoading} />
+                                </div>
+                                <template if:true={endImageUrl}>
+                                    <div class="image-preview-container">
+                                        <img src={endImageUrl} alt="End ODO Meter" class="preview-image" />
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="cancel-btn" onclick={handleCancelEndOdo}>Cancel</button>
+                        <button class="submit-btn" onclick={handleEndOdoSubmit} disabled={isLoading}>
+                            {submitButtonLabel}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <!-- Incomplete Visits Modal -->
+        <template if:true={showMarkMissedModal}>
+            <div class="modal-backdrop"></div>
+            <div class="custom-modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2>Incomplete Visits</h2>
+                    </div>
+                    <div class="modal-body">
+                        <p class="warning-text">Complete the following visits before ending your day:</p>
+                        <div class="visits-container">
+                            <template for:each={incompleteVisits} for:item="visit">
+                                <div key={visit.Id} class="visit-card">
+                                    <div class="visit-info">
+                                        <div class="customer-name">{visit.Customer__r.Name}</div>
+                                        <div class="visit-status">{visit.Status__c}</div>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="go-back-btn" onclick={handleCancelMarkMissed}>
+                            Go Back and Complete Visits
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </template>
+    </div>
+</template>

@@ -1,0 +1,107 @@
+<template>
+  <div class="add-visit-container">
+    <!-- Header with Back and Next Buttons -->
+    <div class="page-header">
+      <h1 class="main-title">Add New Visit</h1>
+    </div>
+
+    <div class="content-wrapper">
+      <!-- Date Selection -->
+      <div class="form-group">
+        <label>Select date</label>
+        <input type="date" value={selectedDate} onchange={handleDateChange} class="date-input" />
+      </div>
+
+      <!-- Visit Type -->
+      <div class="form-group">
+        <label>Visit Type</label>
+        <div class="select-container">
+          <select class="visit-type-select" onchange={handleVisitTypeChange} required>
+            <option value="">Select</option>
+            <template for:each={visitTypeOptions} for:item="option">
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            </template>
+          </select>
+        </div>
+      </div>
+
+      <!-- Today's Visits Cards -->
+      <div class="visits-cards-container">
+        <template if:true={todayVisits.length}>
+          <template for:each={todayVisits} for:item="customer">
+            <article key={customer.customerName} class="visit-card">
+              <div class="card-header">
+                <div class="customer-info">
+                  <lightning-icon icon-name="standard:account" size="small" class="account-icon">
+                  </lightning-icon>
+                  <div class="customer-name">{customer.customerName}</div>
+                </div>
+                <button class="toggle-button" data-id={customer.customerName} onclick={handleToggleSelection}>
+                  <span class={customer.iconClass}>
+                    {customer.iconSymbol}
+                  </span>
+                </button>
+              </div>
+              <div class="card-content">
+                <div class="info-line">
+                  <span class="label">City:</span>
+                  <span class="value">{customer.city}</span>
+                </div>
+                <div class="info-line">
+                  <span class="label">Owner:</span>
+                  <span class="value">{customer.ownerName}</span>
+                </div>
+              </div>
+            </article>
+          </template>
+        </template>
+        <div if:false={todayVisits.length} class="no-visits">
+          {noVisitsMessage}
+        </div>
+      </div>
+
+      <!-- Bottom navigation buttons -->
+      <div class="bottom-button-container">
+        <button class="back-button" onclick={handleBack}>
+          Back
+        </button>
+        <button class="next-button" onclick={handleNext}>
+          Next
+        </button>
+      </div>
+    </div>
+
+    <!-- Selected Items Modal -->
+    <template if:true={showSelectedModal}>
+      <section role="dialog" class="slds-modal slds-fade-in-open">
+        <div class="slds-modal__container">
+          <header class="slds-modal__header">
+            <h2>Selected Accounts</h2>
+            <!-- <button class="slds-button slds-button_icon slds-modal__close" onclick={closeModal}>
+                <lightning-icon icon-name="utility:close" size="small"></lightning-icon>
+              </button> -->
+          </header>
+          <div class="slds-modal__content">
+            <template for:each={selectedVisits} for:item="visit">
+              <div key={visit.customerName} class="selected-visit-row">
+                <div class="visit-customer-name">{visit.customerName}</div>
+                <div class="visit-datetime">
+                  <lightning-input type="date" label="Date" value={visit.date} name={visit.customerName}
+                    onchange={handleDateChange}>
+                  </lightning-input>
+                </div>
+              </div>
+            </template>
+          </div>
+          <footer class="slds-modal__footer">
+            <button class="cancel-button" onclick={closeModal}>Cancel</button>
+            <button class="save-button" onclick={saveVisits}>Save</button>
+          </footer>
+        </div>
+      </section>
+      <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+  </div>
+</template>

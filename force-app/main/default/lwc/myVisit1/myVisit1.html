@@ -1,0 +1,295 @@
+<template>
+    <div class="visit-container">
+        <div class="header">
+            <div class="header-buttons">
+                <button class="btn btn-end" onclick={handleEndDay} if:true={showEndButton}>End Day</button>
+                <button class="btn btn-visit" onclick={handleVisitClick}>Visit</button>
+            </div>
+        </div>
+
+        <div class="summary-section">
+            <h2>Today Summary</h2>
+            <div class="summary-grid">
+                <!-- Planned -->
+                <div class="summary-item">
+                    <div class="icon-circle planned">
+                        <lightning-icon icon-name="utility:task" size="small" variant="inverse"></lightning-icon>
+                    </div>
+                    <div class="item-details">
+                        <span class="count">{visitCounts.planned}</span>
+                        <span class="label">Planned</span>
+                    </div>
+                </div>
+
+                <!-- Completed -->
+                <div class="summary-item">
+                    <div class="icon-circle completed">
+                        <lightning-icon icon-name="utility:check" size="small" variant="inverse"></lightning-icon>
+                    </div>
+                    <div class="item-details">
+                        <span class="count">{visitCounts.completed}</span>
+                        <span class="label">Completed</span>
+                    </div>
+                </div>
+
+                <!-- In Progress -->
+                <div class="summary-item">
+                    <div class="icon-circle in-progress">
+                        <lightning-icon icon-name="utility:loop" size="small" variant="inverse"></lightning-icon>
+                    </div>
+                    <div class="item-details">
+                        <span class="count">{visitCounts.inProgress}</span>
+                        <span class="label">InProgress</span>
+                    </div>
+                </div>
+
+                <!-- Missed -->
+                <div class="summary-item">
+                    <div class="icon-circle missed">
+                        <lightning-icon icon-name="utility:close" size="small" variant="inverse"></lightning-icon>
+                    </div>
+                    <div class="item-details">
+                        <span class="count">{visitCounts.missed}</span>
+                        <span class="label">Missed</span>
+                    </div>
+                </div>
+
+                <!-- No of Visits -->
+                <div class="summary-item">
+                    <div class="icon-circle visits">
+                        <lightning-icon icon-name="utility:travel_and_places" size="small"
+                            variant="inverse"></lightning-icon>
+                    </div>
+                    <div class="item-details">
+                        <span class="count">{visitCounts.total}</span>
+                        <span class="label">No of Visits</span>
+                    </div>
+                </div>
+
+                <!-- Offline -->
+                <div class="summary-item">
+                    <div class="icon-circle offline">
+                        <lightning-icon icon-name="utility:offline" size="small" variant="inverse"></lightning-icon>
+                    </div>
+                    <div class="item-details">
+                        <span class="count">{visitCounts.offline}</span>
+                        <span class="label">Offline</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Visit Creation Modal -->
+        <template if:true={showVisitModal}>
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <!-- Modal Header -->
+                    <header class="slds-modal__header">
+                        <h2 class="slds-text-heading_medium">Create New Visit</h2>
+                    </header>
+
+                    <!-- Modal Body -->
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <div class="slds-form">
+                            <!-- Visit Type Selection -->
+                            <div class="slds-form-element">
+                                <label class="slds-form-element__label">
+                                    <abbr class="slds-required" title="required">*</abbr>
+                                    Today's Plan
+                                </label>
+                                <div class="slds-form-element__control">
+                                    <div class="slds-select_container">
+                                        <select class="slds-select" onchange={handleVisitTypeChange}>
+                                            <option value="">Select Type</option>
+                                            <option value="Lead">Lead</option>
+                                            <option value="Dealer">Dealer</option>
+                                            <option value="Distributor">Distributor</option>
+                                            <option value="Modern Trade">Modern Trade</option>
+                                            <option value="Retailer">Retailer</option>
+                                            <option value="Influencer">Influencer</option>
+                                            <option value="Other">Other</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Dynamic Lookup Field -->
+                            <div class="slds-form-element slds-m-top_medium">
+                                <label class="slds-form-element__label">
+                                    <abbr class="slds-required" title="required">*</abbr>
+                                    {lookupLabel}
+                                </label>
+                                <div class="slds-form-element__control">
+                                    <div class="slds-combobox_container">
+                                        <div
+                                            class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click slds-is-open">
+                                            <template if:true={selectedRecordName}>
+                                                <div
+                                                    class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_left-right">
+                                                    <span
+                                                        class="slds-icon_container slds-icon-standard-account slds-combobox__input-entity-icon">
+                                                        <lightning-icon icon-name="standard:account"
+                                                            size="small"></lightning-icon>
+                                                    </span>
+                                                    <input type="text"
+                                                        class="slds-input slds-combobox__input slds-combobox__input-value"
+                                                        readonly value={selectedRecordName} />
+                                                    <button
+                                                        class="slds-button slds-button_icon slds-input__icon slds-input__icon_right"
+                                                        onclick={handleRemoveSelection}>
+                                                        <lightning-icon icon-name="utility:close" size="xx-small"
+                                                            class="slds-icon slds-icon_x-small slds-icon-text-default">
+                                                        </lightning-icon>
+                                                    </button>
+                                                </div>
+                                            </template>
+
+                                            <template if:false={selectedRecordName}>
+                                                <div
+                                                    class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right">
+                                                    <input type="text" class="slds-input slds-combobox__input"
+                                                        placeholder="Search accounts..." onkeyup={handleSearch}
+                                                        onfocusout={handleInputBlur} value={searchTerm} />
+                                                    <lightning-icon icon-name="utility:search" size="x-small"
+                                                        class="slds-input__icon slds-input__icon_right">
+                                                    </lightning-icon>
+                                                </div>
+
+                                                <template if:true={showSearchResults}>
+                                                    <div
+                                                        class="slds-dropdown slds-dropdown_length-with-icon-7 slds-dropdown_fluid">
+                                                        <ul class="slds-listbox slds-listbox_vertical">
+                                                            <template for:each={searchResults} for:item="record">
+                                                                <li key={record.Id} role="presentation"
+                                                                    class="slds-listbox__item">
+                                                                    <div class="slds-media slds-listbox__option slds-listbox__option_entity"
+                                                                        onclick={handleRecordSelection}
+                                                                        data-id={record.Id} data-name={record.Name}>
+                                                                        <span class="slds-media__figure">
+                                                                            <lightning-icon icon-name="standard:account"
+                                                                                size="small"></lightning-icon>
+                                                                        </span>
+                                                                        <span class="slds-media__body">
+                                                                            <span
+                                                                                class="slds-listbox__option-text">{record.Name}</span>
+                                                                        </span>
+                                                                    </div>
+                                                                </li>
+                                                            </template>
+                                                        </ul>
+                                                    </div>
+                                                </template>
+                                            </template>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Date Selection -->
+                            <div class="slds-form-element slds-m-top_medium">
+                                <label class="slds-form-element__label">Select a date for the visit</label>
+                                <div class="slds-form-element__control">
+                                    <lightning-input type="date" value={defaultDateTime} onchange={handleDateChange}>
+                                    </lightning-input>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modal Footer -->
+                    <footer class="slds-modal__footer">
+                        <button class="slds-button slds-button_neutral" onclick={handleCancel}>Cancel</button>
+                        <button class="slds-button slds-button_brand" onclick={handleCreateVisit}>Create Visit</button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+
+        <!-- End ODO Modal -->
+        <template if:true={showEndOdoModal}>
+            <div class="modal-backdrop"></div>
+            <div class="custom-modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <lightning-icon icon-name="utility:checkin" size="small" class="odo-icon"></lightning-icon>
+                        <h2>End Day ODO Reading</h2>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <input type="number" class="odo-input" placeholder="Enter ODO reading"
+                                onchange={handleEndOdoChange} min="0" step="1" required />
+                        </div>
+
+                        <div class="form-group">
+                            <div class="image-section">
+                                <div class="image-upload-center">
+                                    <label for="end-file-upload" class="capture-btn" disabled={isEndImageLoading}>
+                                        <template if:false={isEndImageLoading}>
+                                            <svg class="camera-icon" viewBox="0 0 24 24">
+                                                <path
+                                                    d="M12 15.2C13.7673 15.2 15.2 13.7673 15.2 12C15.2 10.2327 13.7673 8.8 12 8.8C10.2327 8.8 8.8 10.2327 8.8 12C8.8 13.7673 10.2327 15.2 12 15.2Z" />
+                                                <path
+                                                    d="M9 3L7.17 5H4C2.9 5 2 5.9 2 7V19C2 20.1 2.9 21 4 21H20C21.1 21 22 20.1 22 19V7C22 5.9 21.1 5 20 5H16.83L15 3H9ZM12 17C9.24 17 7 14.76 7 12C7 9.24 9.24 7 12 7C14.76 7 17 9.24 17 12C17 14.76 14.76 17 12 17Z" />
+                                            </svg>
+                                            <span>{captureButtonLabel}</span>
+                                        </template>
+                                        <template if:true={isEndImageLoading}>
+                                            <span>Processing...</span>
+                                        </template>
+                                    </label>
+                                    <input type="file" id="end-file-upload" accept="image/*" capture="environment"
+                                        onchange={handleEndImageUpload} class="file-input-hidden"
+                                        disabled={isEndImageLoading} />
+                                </div>
+                                <template if:true={endImageUrl}>
+                                    <div class="image-preview-container">
+                                        <img src={endImageUrl} alt="End ODO Meter" class="preview-image" />
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="cancel-btn" onclick={handleCancelEndOdo}>Cancel</button>
+                        <button class="submit-btn" onclick={handleEndOdoSubmit} disabled={isLoading}>
+                            {submitButtonLabel}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <!-- Warning Notification -->
+        <template if:true={showWarningNotification}>
+            <div class="notification-backdrop"></div>
+            <div class="notification-modal">
+                <div class="notification-content">
+                    <div class="notification-header">
+                        <lightning-icon icon-name="utility:warning" size="small" class="warning-icon"></lightning-icon>
+                        <h2>Cannot End Day</h2>
+                    </div>
+                    <div class="notification-body">
+                        <p class="warning-text">Please complete the following visits before ending your day:</p>
+                        <div class="visits-container">
+                            <template for:each={incompleteVisits} for:item="visit">
+                                <div key={visit.Id} class="visit-card">
+                                    <div class="visit-info">
+                                        <div class="customer-name">{visit.Customer__r.Name}</div>
+                                        <div class="visit-status">{visit.Status__c}</div>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                    <div class="notification-footer">
+                        <button class="understand-btn" onclick={handleCloseWarning}>
+                            Go Back and Complete Visits
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+    </div>
+</template>

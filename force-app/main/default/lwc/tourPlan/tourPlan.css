@@ -1,0 +1,1229 @@
+/* Main Container */
+.tour-plan-container {
+    background: white;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-top: 10px;
+}
+
+.tour-plan-details-container {
+    background: linear-gradient(to right, #ffffff, #f1f8ff);
+    margin-top: 12px;
+    border-radius: 8px;
+    padding: 0.5rem;
+    margin: 0.5rem 0;
+    /* box-shadow: 0 2px 8px rgba(0, 91, 234, 0.15); */
+    transition: all 0.3s ease;
+}
+
+.tour-plan-details-container:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 198, 251, 0.2);
+}
+
+/* Header Styles */
+.tour-plan-header {
+    background: linear-gradient(45deg, #00c6fb, #005bea);
+    padding: 12px;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0, 198, 251, 0.25);
+    color: white;
+    margin-bottom: 15px;
+}
+
+.tour-plan-title {
+    font-size: 11px;
+    font-weight: 600;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.beat-id {
+    font-size: 14px;
+    font-weight: 600;
+    color: #ffffff;
+    margin-top: 4px;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* Add Visits Button */
+.add-visits-button {
+    background: linear-gradient(45deg, #00c6fb, #005bea);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+    box-shadow: 0 2px 8px rgba(0, 198, 251, 0.3);
+}
+
+.add-visits-button:hover {
+    background: linear-gradient(45deg, #749fe3, #00c6fb);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 91, 234, 0.4);
+}
+
+/* Calendar Container */
+.calendar-container {
+    background: white;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+}
+
+/* Calendar Header */
+.calendar-header {
+    padding: 0.5rem;
+    text-align: center;
+    background: #f8fafc;
+    border-radius: 8px 8px 0 0;
+}
+
+.month-year {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #16325c;
+}
+
+/* Weekday Header */
+.weekday-header {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    background: #f8fafc;
+    border-bottom: 1px solid #e6f2ff;
+}
+
+.weekday {
+    padding: 0.5rem;
+    text-align: center;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #666;
+}
+
+/* Calendar Grid */
+.calendar-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+    padding: 8px;
+}
+
+.calendar-day {
+    min-height: 100px;
+    border: 1px solid #e6f2ff;
+    padding: 0.5rem;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.calendar-day:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(0, 102, 255, 0.1);
+}
+
+.date-number {
+    color: #99c2ff;
+    font-size: 0.9rem;
+}
+
+.visit-count {
+    font-size: 0.75rem;
+    color: #007aff;
+    margin-top: 0.25rem;
+}
+
+/* Tour Details */
+.tour-details-container {
+    background: linear-gradient(145deg, #ffffff, #f5f9ff);
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 16px;
+    box-shadow: 0 4px 20px rgba(33, 150, 243, 0.08);
+    animation: slideIn 0.3s ease;
+}
+
+.detail-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.25rem;
+    padding: 8px;
+    border-radius: 6px;
+    background: #ffffff;
+}
+
+.detail-item:hover {
+    transform: translateX(4px);
+    /* box-shadow: 0 2px 8px rgba(0, 91, 234, 0.15); */
+}
+
+.detail-label {
+    font-size: 0.55rem;
+    color: #003c99;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.detail-value {
+    font-size: 0.65rem;
+    color: #00c3fa;
+    font-weight: 700;
+    margin-top: 0.125rem;
+}
+
+/* Tour Icon */
+.tour-icon {
+    --sds-c-icon-color-background: linear-gradient(45deg, #00c6fb, #005bea);
+    animation: pulse 2s infinite;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.02);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+:host {
+    --sds-c-icon-color-foreground-default: #ffffff;
+    display: block;
+    padding: 12px;
+    font-family: 'Salesforce Sans', Arial, sans-serif;
+}
+
+/* Responsive Styles */
+@media screen and (max-width: 768px) {
+    .tour-plan-container {
+        padding: 12px;
+        margin: 8px;
+    }
+
+    .tour-plan-header {
+        padding: 12px;
+        margin-bottom: 16px;
+    }
+
+    .tour-plan-title {
+        font-size: 12px;
+    }
+
+    .beat-id {
+        font-size: 16px;
+    }
+
+    .add-visits-button {
+        width: 100%;
+        margin: 8px 0;
+        padding: 12px;
+        font-size: 12px;
+    }
+
+    /* Calendar Adjustments */
+    .calendar-container {
+        padding: 12px;
+        margin-bottom: 16px;
+    }
+
+    .calendar-header {
+        margin: -12px -12px 16px -12px;
+        padding: 12px;
+    }
+
+    .month-year {
+        font-size: 16px;
+    }
+
+    .weekday-header {
+        margin-bottom: 8px;
+    }
+
+    .weekday {
+        padding: 8px 4px;
+        font-size: 11px;
+    }
+
+    .calendar-days {
+        gap: 1px;
+        padding: 4px;
+    }
+
+    .calendar-day {
+        min-height: 60px;
+        padding: 4px;
+        font-size: 0.8rem;
+    }
+
+    /* Hide visit details in mobile view */
+    .calendar-day .visit-items {
+        display: none;
+    }
+
+    /* Show only visit count in mobile */
+    .calendar-day .visit-count {
+        display: block;
+        font-size: 0.7rem;
+        margin-top: 2px;
+    }
+
+    .date-number {
+        font-size: 0.8rem;
+        padding: 2px;
+        margin-bottom: 2px;
+    }
+
+    /* Adjust weekday header for mobile */
+    .weekday {
+        font-size: 0.7rem;
+        padding: 4px 2px;
+    }
+
+    /* Ensure calendar container doesn't overflow */
+    .calendar-container {
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+}
+
+/* Small Mobile Devices */
+@media screen and (max-width: 480px) {
+
+    /* Calendar Day Labels */
+    .weekday {
+        font-size: 10px;
+        padding: 4px 2px;
+    }
+
+    /* Abbreviated weekday names for very small screens */
+    .weekday:nth-child(n) {
+        &::first-letter {
+            display: block;
+            font-size: 12px;
+        }
+
+        & span:not(:first-letter) {
+            display: none;
+        }
+    }
+
+    .calendar-day {
+        min-height: 50px;
+        padding: 2px;
+    }
+
+    .date-number {
+        font-size: 0.7rem;
+    }
+
+    .visit-item {
+        margin: 2px 0;
+        padding: 3px 4px;
+        font-size: 9px;
+    }
+
+    /* Stack buttons vertically on very small screens */
+    .primary-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .add-visits-button {
+        padding: 10px;
+        font-size: 11px;
+    }
+}
+
+/* Landscape Mode */
+@media screen and (max-width: 768px) and (orientation: landscape) {
+    .calendar-container {
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+
+    .calendar-day {
+        min-height: 45px;
+    }
+}
+
+/* Tablet Adjustments */
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+    .tour-plan-container {
+        padding: 16px;
+    }
+
+    .calendar-day {
+        min-height: 100px;
+    }
+
+    .visit-item {
+        font-size: 11px;
+    }
+}
+
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+
+
+    .calendar-day {
+        background: linear-gradient(145deg, #f2f7fe, #f2f7fe);
+        border-color: #37474f;
+    }
+
+    .date-number {
+        color: #90caf9;
+    }
+
+    .visit-item {
+        color: #007aff;
+    }
+
+    .detail-value {
+        color: #00c3fa;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .tour-plan-container {
+        box-shadow: none;
+        background: none;
+    }
+
+    .add-visits-button {
+        display: none;
+    }
+
+    .calendar-day {
+        border: 1px solid #ccc;
+        box-shadow: none;
+    }
+}
+
+/* Touch Device Optimizations */
+@media (hover: none) {
+
+    .calendar-day:hover,
+    .visit-item:hover,
+    .detail-item:hover {
+        transform: none;
+        box-shadow: none;
+        background: #adc3d5;
+    }
+
+    .add-visits-button {
+        background: #1e88e5;
+    }
+
+    .add-visits-button:active {
+        background: #1976d2;
+        transform: translateY(1px);
+    }
+}
+
+/* Safe Area Insets for Notched Phones */
+@supports (padding: max(0px)) {
+    .tour-plan-container {
+        padding-left: max(12px, env(safe-area-inset-left));
+        padding-right: max(12px, env(safe-area-inset-right));
+        padding-bottom: max(12px, env(safe-area-inset-bottom));
+    }
+}
+
+/* Add these styles for the modal */
+.visit-detail {
+    padding: 1rem;
+    border-bottom: 1px solid #e6f2ff;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1rem;
+    align-items: center;
+}
+
+.visit-detail:last-child {
+    border-bottom: none;
+}
+
+/* Visit Status Styles - Updated */
+.visit-status {
+    padding: 0.4rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: capitalize;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    flex-shrink: 0;
+    margin-right: 0.75rem;
+}
+
+.status-completed {
+    background: #ebf9f0;
+    color: #0d9737;
+    border: 1px solid #d1f2d9;
+}
+
+.status-completed::before {
+    content: "✓";
+    font-size: 0.875rem;
+}
+
+.status-planned {
+    background: #e6f2ff;
+    color: #0066ff;
+    border: 1px solid #cce5ff;
+}
+
+.status-planned::before {
+    content: "⌚";
+    font-size: 0.875rem;
+}
+
+.status-inprogress {
+    background: #fff4eb;
+    color: #ff6f2c;
+    border: 1px solid #ffe4cc;
+}
+
+.status-inprogress::before {
+    content: "↻";
+    font-size: 0.875rem;
+}
+
+.status-missed {
+    background: #ffe6e6;
+    color: #ff3b3b;
+    border: 1px solid #ffcccc;
+}
+
+.status-missed::before {
+    content: "✕";
+    font-size: 0.875rem;
+}
+
+/* Visit Info Container */
+.visit-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.visit-name {
+    font-weight: 600;
+    color: #16325c;
+    font-size: 1rem;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.visit-type {
+    color: #666;
+    font-size: 0.813rem;
+    margin-top: 0.25rem;
+}
+
+/* Modal Styles - Updated */
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+    z-index: 9000;
+}
+
+.modal-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    width: 90%;
+    max-width: 600px;
+    z-index: 9001;
+    max-height: 90vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-header {
+    background: linear-gradient(90deg, #00d4ff 0%, #0066ff 100%);
+    padding: 1.5rem;
+    border-radius: 16px 16px 0 0;
+    position: relative;
+}
+
+.header-content {
+    color: white;
+}
+
+.header-content h2 {
+    font-size: 1.25rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.selected-date {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.close-button {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.5rem 1.25rem;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.close-button:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.close-button:active {
+    transform: translateY(0);
+}
+
+
+
+/* Visit Cards Container */
+.visits-cards-container {
+    margin-top: 0.75rem;
+    max-height: 45vh;
+    overflow-y: auto;
+    padding-right: 0.5rem;
+}
+
+/* Visit Card */
+.visit-card {
+    background: #f8fbfe;
+    border: 1px solid #e6f2ff;
+    border-radius: 6px;
+    padding: 0.75rem;
+    margin-bottom: 0.5rem;
+    transition: all 0.2s ease;
+}
+
+.visit-card:last-child {
+    margin-bottom: 0;
+}
+
+.visit-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 102, 255, 0.08);
+}
+
+/* Card Header */
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Customer Info */
+.customer-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 1;
+}
+
+.customer-name {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #16325c;
+}
+
+/* Card Content */
+.card-content {
+    padding: 0.5rem 0 0;
+    font-size: 0.75rem;
+}
+
+.info-line {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.25rem;
+    color: #666;
+}
+
+.label {
+    color: #706e6b;
+    min-width: 35px;
+    font-size: 0.75rem;
+}
+
+.value {
+    color: #16325c;
+    font-size: 0.75rem;
+}
+
+/* Toggle Button */
+.toggle-button {
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    border-radius: 50%;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+/* Add icon (plus sign) styling */
+.toggle-button .add-icon {
+    color: white;
+    font-size: 1rem;
+    line-height: 1;
+}
+
+/* Delete icon (X) styling */
+.toggle-button .delete-icon {
+    color: white;
+    font-size: 1rem;
+    line-height: 1;
+}
+
+/* Button background colors */
+.toggle-button:has(.add-icon) {
+    background: #00a1f5;  /* Blue for add */
+}
+
+.toggle-button:has(.delete-icon) {
+    background: #ff3b30;  /* Red for delete */
+}
+
+/* Hover states */
+.toggle-button:has(.add-icon):hover {
+    transform: scale(1.1);
+    background: #0176d3;
+}
+
+.toggle-button:has(.delete-icon):hover {
+    transform: scale(1.1);
+    background: #dc2626;
+}
+
+/* Form Groups */
+.form-group {
+    margin-bottom: 1rem;
+}
+
+/* Button Container */
+.button-container {
+    padding: 0.75rem 1rem;
+    border-top: 1px solid #e6f2ff;
+    background: white;
+}
+
+/* Action Buttons */
+.back-button,
+.next-button {
+    padding: 0.75rem 2rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex: 1;
+    text-align: center;
+    max-width: 180px;
+}
+
+.back-button {
+    background: white;
+    color: #0066cc;
+    border: 1px solid #0066cc;
+}
+
+.next-button {
+    background: #0066cc;
+    color: white;
+    border: none;
+}
+
+.back-button:hover {
+    background: #f5f8ff;
+}
+
+.next-button:hover {
+    background: #0052cc;
+}
+
+/* Message Styles */
+.placeholder-message {
+    text-align: center;
+    padding: 2rem;
+    color: #666;
+    font-size: 0.875rem;
+    font-weight: 500;
+    background: #f8fafc;
+    border: 1px dashed #e6f2ff;
+    border-radius: 8px;
+    margin: 1rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 80px;
+    box-shadow: inset 0 0 6px rgba(0, 102, 255, 0.05);
+}
+
+/* Add subtle hover effect */
+.placeholder-message:hover {
+    background: #fafbfd;
+    border-color: #cce5ff;
+}
+
+/* Add animation */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.placeholder-message {
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* Animation */
+@keyframes slideUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Add New Visit Modal - Main Container */
+.slds-modal__container.add-visit-modal {
+    max-width: 500px;
+    width: 90%;
+    margin: 2rem auto;  /* Center horizontally */
+    background: transparent;
+    border-radius: 12px;
+    overflow: hidden;
+    animation: slideUp 0.3s ease-out;
+    position: absolute;  /* Change to absolute */
+    left: 50%;         /* Center horizontally */
+    top: 50%;          /* Center vertically */
+    transform: translate(-50%, -50%);  /* Perfect centering */
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Modal Header */
+.modal-header {
+    background: linear-gradient(90deg, #00c6fb 0%, #005bea 100%);
+    padding: 1rem;
+    text-align: center;
+    border-radius: 12px 12px 0 0;
+}
+
+.modal-header h2 {
+    color: white;          /* Make text white */
+    font-size: 1.25rem;
+    font-weight: 700;      /* Make text bold */
+    margin: 0;
+    text-transform: none;  /* Remove any text transformation */
+    letter-spacing: 0.5px; /* Slight letter spacing for better readability */
+}
+
+/* Ensure modal is centered */
+.slds-modal {
+    align-items: center;
+    justify-content: center;
+    display: flex;
+}
+
+/* Modal Content */
+.modal-content {
+    padding: 1rem;
+    background: white;
+    overflow-y: auto;
+    max-height: calc(85vh - 160px);
+    /* border-radius: 0 0 12px 12px; */
+}
+
+/* Visit Cards Container */
+.visits-cards-container {
+    margin-top: 0.75rem;
+    max-height: 45vh;
+    overflow-y: auto;
+    padding-right: 0.5rem;
+}
+
+/* Visit Card */
+.visit-card {
+    background: #f8fbfe;
+    border: 1px solid #e6f2ff;
+    border-radius: 6px;
+    padding: 0.75rem;
+    margin-bottom: 0.5rem;
+    transition: all 0.2s ease;
+}
+
+/* Button Container */
+.button-container {
+    padding: 0.75rem 1rem;
+    border-top: 1px solid #e6f2ff;
+    background: white;
+    border-radius: 0 0 12px 12px;
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+/* Form Groups */
+.form-group {
+    margin-bottom: 1rem;
+    background: white;
+    padding: 0.75rem;
+    border-radius: 8px;
+}
+
+/* Form Labels */
+.form-group label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 700;  /* Make labels bold */
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Specific label colors */
+.form-group:nth-child(1) label {  /* SELECT DATE */
+    color: #2196f3;  /* Blue color */
+}
+
+.form-group:nth-child(2) label {  /* VISIT TYPE */
+    color: #1976d2;  /* Darker blue */
+}
+
+/* Input Fields - Enhanced */
+.date-input,
+.visit-type-select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #e0e3ec;
+    font-size: 0.875rem;
+    font-weight: 500;  /* Make text slightly bold */
+    color: #16325c;
+    background: white;
+    transition: all 0.2s ease;
+}
+
+.date-input:focus,
+.visit-type-select:focus {
+    border-color: #2196f3;
+    box-shadow: 0 0 0 1px #2196f3;
+    outline: none;
+}
+
+/* Placeholder text */
+.visit-type-select option {
+    font-weight: 500;
+    color: #16325c;
+}
+
+.visit-type-select option:first-child {
+    color: #666;
+}
+
+/* Search Filter Styles */
+.search-group {
+    position: relative;
+    margin-top: 0.5rem;
+}
+
+.search-group label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #4caf50 !important;  /* Green color for search label */
+}
+
+.search-icon {
+    --sds-c-icon-color-foreground: #4caf50;
+}
+
+.search-input-wrapper {
+    position: relative;
+    margin-top: 0.5rem;
+}
+
+.search-input {
+    width: 100%;
+    padding: 0.75rem;
+    padding-left: 2.5rem;  /* Space for the icon */
+    border: 1px solid #e0e3ec;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    color: #16325c;
+    background: white;
+    transition: all 0.2s ease;
+    background-image: url(/assets/icons/utility-sprite/svg/symbols.svg#search);
+    background-repeat: no-repeat;
+    background-position: 0.75rem center;
+    background-size: 1rem;
+}
+
+.search-input:focus {
+    border-color: #4caf50;
+    box-shadow: 0 0 0 1px #4caf50;
+    outline: none;
+}
+
+.search-input::placeholder {
+    color: #a0aec0;
+    font-style: italic;
+}
+
+/* Search Spinner */
+.search-spinner {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.spinner {
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #4caf50;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Adjust visit cards container when search is active */
+.visits-cards-container.with-search {
+    max-height: calc(45vh - 60px);  /* Reduce height to accommodate search */
+}
+
+/* Selected Accounts Modal Specific Styles */
+.selected-visit-row {
+    padding: 0.5rem;
+}
+
+.selected-visit-row .visit-card {
+    background: #f8fbfe;
+    border: 1px solid #e6f2ff;
+    border-radius: 8px;
+    padding: 0.75rem;
+    margin-bottom: 0.5rem;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+}
+
+.selected-visit-row .visit-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 102, 255, 0.08);
+    border-color: #2196f3;
+}
+
+.selected-visit-row .card-header {
+    width: 100%;
+    padding: 0.25rem;
+}
+
+.selected-visit-row .customer-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.selected-visit-row .customer-name {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #16325c;
+}
+
+.selected-visit-row .account-icon {
+    --sds-c-icon-color-background: #2196f3;
+    --sds-c-icon-color-foreground: #ffffff;
+}
+
+/* Modal Header for Selected Accounts */
+.slds-modal__container.add-visit-modal .modal-header h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: white;
+    text-align: center;
+    letter-spacing: 0.5px;
+}
+
+/* Selected Accounts Modal Content */
+.slds-modal__container.add-visit-modal .modal-content {
+    padding: 1rem;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+/* Scrollbar for Selected Accounts */
+.slds-modal__container.add-visit-modal .modal-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.slds-modal__container.add-visit-modal .modal-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+.slds-modal__container.add-visit-modal .modal-content::-webkit-scrollbar-thumb {
+    background: #2196f3;
+    border-radius: 3px;
+}
+
+/* Visit Card Layout */
+.visit-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.customer-icon {
+    flex-shrink: 0;
+}
+
+.visit-info-container {
+    width: 100%;
+}
+
+/* Add Visit Modal */
+.add-visit-modal {
+    position: relative;
+    z-index: 9000;
+}
+
+/* Selected Accounts Modal */
+.selected-accounts-modal {
+    position: relative;
+    z-index: 9002;
+}
+
+/* Backdrop styles */
+.slds-backdrop {
+    background: rgba(0, 0, 0, 0.6);
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+}
+
+/* When Selected Modal is open, blur the background modal */
+.selected-accounts-open .add-visit-modal {
+    filter: blur(4px);
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+/* Modal backdrop with blur */
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+    z-index: 9000;
+}
+
+/* Add Visit Modal Container */
+.add-visit-modal {
+    background: rgba(0, 0, 0, 0.5);
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+    position: relative;
+    z-index: 9001;
+}
+
+/* Selected Accounts Modal Container */
+.selected-accounts-modal {
+    background: rgba(0, 0, 0, 0.5);
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+    position: relative;
+    z-index: 9002;
+}
+
+/* When Selected Accounts Modal is open */
+.selected-accounts-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+    z-index: 9001;
+}

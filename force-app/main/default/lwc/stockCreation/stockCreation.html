@@ -1,0 +1,62 @@
+<template>
+    <div class="ticket-container">
+        <div class="ticket-header">
+            NEW STOCK
+        </div>
+
+        <div class="ticket-form">
+            <div class="form-group">
+                <label>{visitType} Name:</label>
+                <div class="field-value">{distributorName}</div>
+            </div>
+
+            <div class="form-group">
+                <label>Product Category</label>
+                <select class="form-control" onchange={handleCategoryChange}>
+                    <template for:each={productCategories} for:item="category">
+                        <option key={category.value} value={category.value}>{category.label}</option>
+                    </template>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <lightning-combobox data-id="product-combobox" label="Product" value={selectedProduct}
+                    options={products} onchange={handleProductChange} disabled={isProductDisabled}>
+                </lightning-combobox>
+            </div>
+
+            <div class="form-group">
+                <label>
+                    <span>UOM</span>
+                    <span class="required">*</span>
+                </label>
+                <select class="form-control" onchange={handleUOMChange} required>
+                    <template for:each={uomOptions} for:item="uom">
+                        <option key={uom.value} value={uom.value}>{uom.label}</option>
+                    </template>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>
+                    <span>Current Stock</span>
+                    <span class="required">*</span>
+                </label>
+                <input type="number" class="form-control" onchange={handleStockChange} required />
+            </div>
+
+            <div class="form-group">
+                <label>
+                    <span>Comments</span>
+                    <span class="required">*</span>
+                </label>
+                <textarea class="form-control" onchange={handleCommentsChange} required>{comments}</textarea>
+            </div>
+
+            <div class="button-group">
+                <button class="cancel-btn" onclick={handleCancel}>Cancel</button>
+                <button class="save-btn" onclick={handleSave}>Save</button>
+            </div>
+        </div>
+    </div>
+</template>

@@ -1,0 +1,122 @@
+<template>
+    <div class="ticket-container">
+        <div class="ticket-header">
+            NEW INVOICE
+        </div>
+
+        <div class="ticket-form">
+            <div class="form-group">
+                <label>Distributor Name:</label>
+                <div class="field-value">{distributorName}</div>
+            </div>
+
+            <div class="form-group">
+                <label>Invoice Date:</label>
+                <div class="field-value">{currentDate}</div>
+            </div>
+
+            <div class="form-group">
+                <label class="required">Due Date *</label>
+                <input type="date" class="form-control" value={dueDate} onchange={handleDueDateChange} min={currentDate}
+                    required />
+            </div>
+
+            <div class="form-group">
+                <label class="required">Category</label>
+                <div class="select-container">
+                    <select class="form-control" onchange={handleCategoryChange}>
+                        <option value="">Select Product Category</option>
+                        <template for:each={categoryOptions} for:item="option">
+                            <option key={option.value} value={option.value}>
+                                {option.label}
+                            </option>
+                        </template>
+                    </select>
+                </div>
+            </div>
+
+            <div class="products-section">
+                <template for:each={productList} for:item="product">
+                    <div key={product.Id} class="product-card">
+                        <div class="product-layout">
+                            <div class="product-image">
+                                <lightning-formatted-rich-text value={product.Product_Image__c}>
+                                </lightning-formatted-rich-text>
+                            </div>
+                            <div class="product-details">
+                                <div class="product-title">{product.Name}</div>
+                                <div class="input-grid">
+                                    <div class="input-row">
+                                        <div class="input-group">
+                                            <label>Quantity</label>
+                                            <input type="number" class="custom-input" data-product-id={product.Id}
+                                                value={product.quantity} onchange={handleQuantityChange} />
+                                        </div>
+                                        <div class="input-group">
+                                            <label>Price</label>
+                                            <input type="text" class="custom-input" value={product.Price__c} readonly />
+                                        </div>
+                                    </div>
+                                    <div class="input-row">
+                                        <div class="input-group">
+                                            <label>Discount</label>
+                                            <input type="number" class="custom-input" data-product-id={product.Id}
+                                                value={product.discount} onchange={handleDiscountChange} />
+                                        </div>
+                                        <div class="input-group">
+                                            <label>Total</label>
+                                            <input type="text" class="custom-input" value={product.Total} readonly />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+
+            <div class="button-group">
+                <button class="cancel-btn" onclick={handleCancel}>Cancel</button>
+                <button class="review-btn" onclick={handleReview}>Review</button>
+                <button class="save-btn" onclick={handleSave}>Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Review Modal -->
+    <template if:true={showReviewModal}>
+        <div class="review-modal">
+            <div class="review-content">
+                <div class="review-header">
+                    <h2>Review Invoice Items</h2>
+                </div>
+                <div class="review-body">
+                    <div class="review-info">
+                        <p><strong>Distributor:</strong> {distributorName}</p>
+                        <p><strong>Due Date:</strong> {dueDate}</p>
+                    </div>
+                    <div class="selected-items">
+                        <template for:each={selectedItemsList} for:item="item">
+                            <div key={item.Id} class="review-item">
+                                <div class="item-name">{item.Name}</div>
+                                <div class="item-details">
+                                    <span>Qty: {item.quantity}</span>
+                                    <span>Price: ₹{item.Price__c}</span>
+                                    <span>Discount: {item.discount}%</span>
+                                    <span>Total: ₹{item.Total}</span>
+                                </div>
+                            </div>
+                        </template>
+                        <div class="total-amount">
+                            <strong>Grand Total: ₹{totalAmount}</strong>
+                        </div>
+                    </div>
+                </div>
+                <div class="review-footer">
+                    <button class="cancel-btn" onclick={handleReviewClose}>Back</button>
+                    <button class="confirm-btn" onclick={handleReviewConfirm}>Confirm</button>
+                </div>
+            </div>
+        </div>
+    </template>
+</template>

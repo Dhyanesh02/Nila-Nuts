@@ -1,0 +1,302 @@
+<template>
+  <div>
+    <div class="tour-plan-header slds-p-around_small">
+      <div class="slds-grid slds-gutters slds-grid_vertical-align-center">
+        <div class="slds-col">
+          <div class="slds-media">
+            <div class="slds-media__figure">
+              <lightning-icon icon-name="standard:tour" size="small" class="tour-icon">
+              </lightning-icon>
+            </div>
+            <div class="slds-media__body">
+              <div class="tour-plan-title">Tour Plan</div>
+              <div class="beat-id">{beatName}</div>
+            </div>
+          </div>
+        </div>
+        <div class="slds-col slds-text-align_right">
+          <button class="add-visits-button" onclick={handleAddVisit}>Add Visits</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Tour Plan Details Section -->
+  <div class="tour-plan-details-container slds-p-around_x-small">
+    <div class="slds-grid slds-gutters">
+      <!-- Left Column -->
+      <div class="slds-col">
+        <div class="detail-item slds-p-vertical_xx-small">
+          <div class="detail-label">BEAT ID</div>
+          <div class="detail-value">{beatId}</div>
+        </div>
+        <div class="detail-item slds-p-vertical_xx-small">
+          <div class="detail-label">Month</div>
+          <div class="detail-value">{month}</div>
+        </div>
+        <div class="detail-item slds-p-vertical_xx-small">
+          <div class="detail-label">Year</div>
+          <div class="detail-value">{year}</div>
+        </div>
+        <div class="detail-item slds-p-vertical_xx-small">
+          <div class="detail-label">Approval Status</div>
+          <div class="detail-value">{approvalStatus}</div>
+        </div>
+        <div class="detail-item slds-p-vertical_xx-small">
+          <div class="detail-label">Created Date</div>
+          <div class="detail-value">{createdDate}</div>
+        </div>
+      </div>
+      <!-- Right Column -->
+      <div class="slds-col">
+        <div class="detail-item slds-p-vertical_xx-small">
+          <div class="detail-label">Start Date</div>
+          <div class="detail-value">{startDate}</div>
+        </div>
+        <div class="detail-item slds-p-vertical_xx-small">
+          <div class="detail-label">End Date</div>
+          <div class="detail-value">{endDate}</div>
+        </div>
+        <div class="detail-item slds-p-vertical_xx-small">
+          <div class="detail-label">User</div>
+          <div class="detail-value">{userName}</div>
+        </div>
+        <div class="detail-item slds-p-vertical_xx-small">
+          <div class="detail-label">Last Modified Date</div>
+          <div class="detail-value">{lastModifiedDate}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tour-plan-container">
+    <template for:each={calendars} for:item="calendar">
+      <div key={calendar.monthYear} class="calendar-container">
+        <div class="calendar-header">
+          <div class="month-year">{calendar.monthYear}</div>
+        </div>
+
+        <div class="weekday-header">
+          <template for:each={weekDayHeaders} for:item="weekday">
+            <div key={weekday} class="weekday">{weekday}</div>
+          </template>
+        </div>
+
+        <div class="calendar-days">
+          <template for:each={calendar.days} for:item="day">
+            <div key={day.key} class={day.className} onclick={handleMoreClick} data-date={day.dayNumber}
+              data-yearmonth={calendar.yearMonth}>
+              <div class="date-number">{day.dayNumber}</div>
+              <div class="visit-items">
+                <template for:each={day.visits} for:item="visit">
+                  <div key={visit.id} class="visit-item">
+                    {visit.name}
+                  </div>
+                </template>
+                <template if:true={day.hasMoreVisits}>
+                  <div class="visit-count">
+                    +{day.moreCount} more
+                  </div>
+                </template>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+    </template>
+  </div>
+
+  <c-add-visit if:true={showAddVisit} is-modal-open={showAddVisit} onclose={handleCloseAddVisit}>
+  </c-add-visit>
+
+  <!-- Modal -->
+  <template if:true={showModal}>
+    <div class="modal-backdrop">
+      <div class="modal-container">
+        <div class="modal-header">
+          <div class="header-content">
+            <h2>Selected date</h2>
+            <div class="selected-date">{selectedDate}</div>
+          </div>
+          <button class="close-button" onclick={closeModal}>
+            Close
+          </button>
+        </div>
+        <div class="modal-content">
+          <template for:each={selectedDayVisits} for:item="visit">
+            <div key={visit.id} class="visit-card">
+              <div class="visit-header">
+                <div class="customer-icon">
+                  <lightning-icon icon-name="standard:store" size="small">
+                  </lightning-icon>
+                </div>
+                <div class="customer-info">
+                  <div class="visit-info-container">
+                    <div class="visit-header">
+                      <div class={visit.statusClass}>
+                        {visit.status}
+                      </div>
+                      <div class="visit-info">
+                        <div class="visit-name">{visit.name}</div>
+                        <div class="visit-type">{visit.visitFor}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <!-- Add Loading Overlay -->
+  <template if:true={isPageLoading}>
+    <div class="loading-overlay">
+      <div class="loading-spinner">
+        <div class="spinner-container">
+          <div class="spinner"></div>
+        </div>
+        <div class="loading-text">Loading...</div>
+      </div>
+    </div>
+  </template>
+
+  <!-- Add Refresh Animation Overlay -->
+  <template if:true={showRefreshAnimation}>
+    <div class="refresh-overlay">
+      <div class="refresh-spinner">
+        <div class="spinner-container">
+          <div class="spinner"></div>
+        </div>
+        <div class="refresh-text">Refreshing...</div>
+      </div>
+    </div>
+  </template>
+
+  <!-- Add Visit Modal -->
+  <template if:true={showAddVisitModal}>
+    <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+      <div class="slds-modal__container add-visit-modal">
+        <div class="modal-header">
+          <h2>Add New Visit</h2>
+        </div>
+        <div class="modal-content">
+          <!-- Date Selection -->
+          <div class="form-group">
+            <label>Select date</label>
+            <input type="date" class="date-input" value={selectedDate} min={todayDate} required
+              onchange={handleDateChange} />
+          </div>
+
+          <!-- Visit Type -->
+          <div class="form-group">
+            <label>Visit Type</label>
+            <select class="visit-type-select" onchange={handleVisitTypeChange}>
+              <option value="">Select</option>
+              <template for:each={visitTypeOptions} for:item="option">
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              </template>
+            </select>
+          </div>
+
+          <!-- Add this after the Visit Type form group -->
+          <div class="form-group search-group" if:true={visitType}>
+            <label>
+              <lightning-icon icon-name="utility:search" size="x-small" class="search-icon"></lightning-icon>
+              Search Accounts
+            </label>
+            <div class="search-input-wrapper">
+              <input type="text" class="search-input" placeholder="Type to search accounts..."
+                onkeyup={handleSearchInput} />
+              <div if:true={isSearching} class="search-spinner">
+                <div class="spinner"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Message when no visit type selected -->
+          <div if:true={showPlaceholderMessage} class="placeholder-message">
+            Please select a visit type
+          </div>
+
+          <!-- Visit Cards Container -->
+          <div class="visits-cards-container">
+            <template if:true={todayVisits.length}>
+              <template for:each={todayVisits} for:item="visit">
+                <article key={visit.customerName} class="visit-card">
+                  <div class="card-header">
+                    <div class="customer-info">
+                      <lightning-icon icon-name="standard:account" size="small" class="account-icon">
+                      </lightning-icon>
+                      <div class="customer-name">{visit.customerName}</div>
+                    </div>
+                    <button class="toggle-button" data-id={visit.customerName} onclick={handleToggleSelection}>
+                      <span class={visit.iconClass}>
+                        {visit.iconSymbol}
+                      </span>
+                    </button>
+                  </div>
+                  <div class="card-content">
+                    <div class="info-line">
+                      <span class="label">City:</span>
+                      <span class="value">{visit.city}</span>
+                    </div>
+                    <div class="info-line">
+                      <span class="label">Owner:</span>
+                      <span class="value">{visit.ownerName}</span>
+                    </div>
+                  </div>
+                </article>
+              </template>
+            </template>
+            <div if:false={todayVisits.length} class="no-visits">
+              {noVisitsMessage}
+            </div>
+          </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="button-container">
+          <button class="back-button" onclick={closeAddVisitModal}>Back</button>
+          <button class="next-button" onclick={handleNext}>Next</button>
+        </div>
+
+      </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+
+    <!-- Selected Items Modal -->
+    <template if:true={showSelectedModal}>
+      <div class="selected-accounts-backdrop"></div>
+      <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+        <div class="slds-modal__container selected-accounts-modal">
+          <div class="modal-header">
+            <h2>Selected Accounts</h2>
+          </div>
+          <div class="modal-content">
+            <template for:each={selectedVisits} for:item="visit">
+              <div key={visit.customerName} class="selected-visit-row">
+                <div class="visit-card">
+                  <div class="card-header">
+                    <div class="customer-info">
+                      <lightning-icon icon-name="standard:account" size="small" class="account-icon">
+                      </lightning-icon>
+                      <div class="customer-name">{visit.customerName}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </template>
+          </div>
+          <div class="button-container">
+            <button class="back-button" onclick={handleBackToAddVisit}>Back</button>
+            <button class="next-button" onclick={saveVisits}>Save</button>
+          </div>
+        </div>
+      </section>
+    </template>
+  </template>
+</template>

@@ -1,0 +1,65 @@
+<template>
+    <div class="ticket-container">
+        <div class="ticket-header">
+            NEW TICKET
+        </div>
+
+        <div class="ticket-form">
+            <div class="form-group">
+                <label>Distributor Name:</label>
+                <div class="field-value">{distributorName}</div>
+            </div>
+
+            <div class="form-group">
+                <label>Ticket Date:</label>
+                <div class="field-value">{formattedDate}</div>
+            </div>
+
+            <div class="form-group">
+                <label>Store</label>
+                <div class="field-value">{distributorName}</div>
+            </div>
+
+            <div class="form-group">
+                <label class="required">Complaint Type</label>
+                <lightning-combobox options={complaintTypes} value={selectedComplaintType}
+                    onchange={handleComplaintTypeChange} placeholder="Select Complaint Type">
+                </lightning-combobox>
+            </div>
+
+            <div class="form-group">
+                <label class="required">Description</label>
+                <lightning-textarea onchange={handleDescriptionChange}>
+                </lightning-textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Image</label>
+                <div class="image-upload-container">
+                    <div class="upload-btn-wrapper">
+                        <button class="upload-btn">
+                            <lightning-icon icon-name="utility:image" size="small" class="icon"></lightning-icon>
+                            Add Image
+                        </button>
+                        <input type="file" accept="image/*" capture="environment" onchange={handleFileChange} />
+                    </div>
+
+                    <!-- Preview container -->
+                    <template if:true={imageUrl}>
+                        <div class="preview-container">
+                            <img src={imageUrl} class="preview-image" />
+                            <button class="remove-btn" onclick={handleRemoveImage}>
+                                <lightning-icon icon-name="utility:close" size="small"></lightning-icon>
+                            </button>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button class="cancel-btn" onclick={handleCancel}>Cancel</button>
+                <button class="save-btn" onclick={handleSave}>Save</button>
+            </div>
+        </div>
+    </div>
+</template>
