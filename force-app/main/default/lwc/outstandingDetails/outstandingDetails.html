@@ -84,45 +84,39 @@
           <h2>New Payment</h2>
         </div>
         <div class="payment-modal-content">
-          <div class="form-group">
-            <label>Amount<span class="required-star">*</span></label>
-            <lightning-input type="number" placeholder="Enter payment amount" value={paymentAmount} required
-              onchange={handleAmountChange}>
-            </lightning-input>
-          </div>
+          <lightning-input type="number" label="Amount" placeholder="Enter payment amount" value={paymentAmount}
+            required onchange={handleAmountChange}>
+          </lightning-input>
 
-
-          <lightning-combobox label="Payment Mode" variant="label-inline" label-class="label-with-required"
-            value={paymentMode} options={paymentModeOptions} required onchange={handlePaymentModeChange}>
+          <lightning-combobox label="Payment Mode" value={paymentMode} options={paymentModeOptions} required
+            onchange={handlePaymentModeChange}>
           </lightning-combobox>
 
           <!-- Card Details Section -->
           <template if:true={showCardFields}>
-            <lightning-input type="number" label="Card Number" variant="label-inline" label-class="label-with-required"
-              placeholder="Enter card number" value={cardNumber} required maxlength="16" minlength="16"
-              onchange={handleCardNumberChange}>
+            <lightning-input type="text" label="Card Number" placeholder="Enter card number" value={cardNumber}
+              required maxlength="16" minlength="16" pattern="[0-9]*" onchange={handleCardNumberChange}>
             </lightning-input>
 
-            <lightning-combobox label="Card Type" variant="label-inline" label-class="label-with-required"
-              value={cardType} options={cardTypeOptions} required onchange={handleCardTypeChange}>
+            <lightning-combobox label="Card Type" value={cardType} options={cardTypeOptions} required
+              onchange={handleCardTypeChange}>
             </lightning-combobox>
 
             <div class="card-details-row">
-              <lightning-input type="number" label="CVV" variant="label-inline" label-class="label-with-required"
-                placeholder="CVV" value={cvv} required maxlength="3" minlength="3" class="cvv-input"
-                onchange={handleCvvChange}>
+              <lightning-input type="number" label="CVV" placeholder="CVV" value={cvv} required maxlength="3"
+                minlength="3" class="cvv-input" onchange={handleCvvChange}>
               </lightning-input>
 
-              <lightning-input type="date" label="Expiration Date" variant="label-inline"
-                label-class="label-with-required" value={expirationDate} required onchange={handleExpirationDateChange}>
+              <lightning-input type="date" label="Expiration Date" value={expirationDate} required
+                onchange={handleExpirationDateChange}>
               </lightning-input>
             </div>
           </template>
 
           <!-- Online Transfer Field -->
           <template if:true={showTransactionField}>
-            <lightning-input type="text" label="Transaction ID" variant="label-inline" label-class="label-with-required"
-              placeholder="Enter transaction ID" value={transactionId} required onchange={handleTransactionIdChange}>
+            <lightning-input type="text" label="Transaction ID" placeholder="Enter transaction ID" value={transactionId}
+              required onchange={handleTransactionIdChange}>
             </lightning-input>
           </template>
         </div>
