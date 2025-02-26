@@ -16,7 +16,7 @@ export default class InvoiceCreation extends LightningElement {
     @track productList = [];
     @track selectedProducts = new Map();
     @track selectedFamily;
-    currentDate = new Date().toLocaleDateString();
+    currentDate = new Date().toLocaleDateString('en-GB');
     isLoading = false;
     @track dueDate;
     @track showReviewModal = false;
@@ -122,8 +122,20 @@ export default class InvoiceCreation extends LightningElement {
         this.productList = [...updatedList];
     }
 
+    get minDate() {
+        return new Date().toISOString().split('T')[0];
+    }
+    
     handleDueDateChange(event) {
-        this.dueDate = event.target.value;
+        const selectedDate = event.target.value;
+        if (selectedDate < this.minDate) {
+            this.showToast('Error', 'Please select today or a future date', 'error');
+            event.target.value = this.minDate;
+            return;
+        }
+        // Convert the date to dd/mm/yyyy format for display
+        const dateObj = new Date(selectedDate);
+        this.dueDate = dateObj.toLocaleDateString('en-GB');
     }
 
     handleReview() {

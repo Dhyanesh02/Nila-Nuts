@@ -68,8 +68,6 @@ public with sharing class VisitController {
         ];
     }
 
-
-
     @AuraEnabled
     public static void updateVisitCheckin(Id visitId, String latitude, String longitude, String checkinTime) {
         try {
