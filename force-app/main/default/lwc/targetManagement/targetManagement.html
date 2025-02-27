@@ -1,0 +1,108 @@
+<template>
+    <div class="container">
+        <!-- Simple buttons -->
+        <div class="button-container">
+            <button class={createTargetClass} onclick={handleCreateTarget}>
+                Create Target
+            </button>
+            <button class={targetVsActualClass} onclick={handleTargetVsActual}>
+                Target vs Actual
+            </button>
+        </div>
+
+        <!-- Content Section -->
+        <div class="content-section">
+            <!-- Create Target View -->
+            <template if:true={showCreateTarget}>
+                <c-add-target onclose={handleClose}></c-add-target>
+            </template>
+
+            <!-- Target vs Actual View -->
+            <template if:true={showTargetVsActual}>
+                <div class="dashboard-container">
+                    <!-- Filters -->
+                    <div class="filter-section">
+                        <div class="filter-group">
+                            <label>Target Period</label>
+                            <div class="select-wrapper">
+                                <select class="custom-select" onchange={handlePeriodChange}>
+                                    <option value="">Select Period</option>
+                                    <template for:each={targetPeriods} for:item="period">
+                                        <option key={period.value} value={period.value}>{period.label}</option>
+                                    </template>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="filter-group">
+                            <label>Sales Rep</label>
+                            <div class="select-wrapper">
+                                <select class="custom-select" onchange={handleSalesRepChange}>
+                                    <option value="">Select Sales Rep</option>
+                                    <template for:each={salesReps} for:item="rep">
+                                        <option key={rep.Id} value={rep.Id}>{rep.Name}</option>
+                                    </template>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Summary Cards -->
+                    <div class="summary-cards">
+                        <div class="card gradient-blue">
+                            <div class="card-content">
+                                <div class="card-title">Total Target</div>
+                                <div class="card-value">₹{totalTargetAmount}</div>
+                                <div class="card-subtitle">{totalTargetQty} Units</div>
+                            </div>
+                        </div>
+                        <div class="card gradient-purple">
+                            <div class="card-content">
+                                <div class="card-title">Total Sales</div>
+                                <div class="card-value">₹{totalSalesAmount}</div>
+                                <div class="card-subtitle">{totalSalesQty} Units</div>
+                            </div>
+                        </div>
+                        <div class="card gradient-orange">
+                            <div class="card-content">
+                                <div class="card-title">Achievement</div>
+                                <div class="card-value">{achievementPercentage}%</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Table section remains the same -->
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Target Qty</th>
+                                    <th>Target Amount</th>
+                                    <th>Actual Qty</th>
+                                    <th>Actual Amount</th>
+                                    <th>Achievement</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={productComparisons} for:item="item">
+                                    <tr key={item.productId}>
+                                        <td>{item.productName}</td>
+                                        <td>{item.targetQty}</td>
+                                        <td>₹{item.targetAmount}</td>
+                                        <td>{item.actualQty}</td>
+                                        <td>₹{item.actualAmount}</td>
+                                        <td>
+                                            <div class="achievement-cell">
+                                                <span class={item.achievementClass}>{item.achievement}%</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </div>
+</template>

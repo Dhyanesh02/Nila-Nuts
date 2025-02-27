@@ -1,0 +1,131 @@
+<template>
+    <div class="ticket-container">
+        <div class="ticket-header">
+            NEW TARGET
+        </div>
+
+        <div class="ticket-form">
+            <!-- Target Name -->
+            <div class="form-group">
+                <label class="required">Target Name</label>
+                <input type="text" class="custom-input" onchange={handleTargetNameChange}/>
+            </div>
+
+            <!-- Sales Rep -->
+            <div class="form-group">
+                <label class="required">Sales Rep</label>
+                <select class="custom-select" onchange={handleSalesRepChange}>
+                    <option value="">Select Sales Rep</option>
+                    <template for:each={salesReps} for:item="rep">
+                        <option key={rep.Id} value={rep.Id}>{rep.Name}</option>
+                    </template>
+                </select>
+            </div>
+
+            <!-- Target Period -->
+            <div class="form-group">
+                <label class="required">Target Period</label>
+                <select class="custom-select" onchange={handlePeriodChange}>
+                    <option value="">Select Period</option>
+                    <template for:each={targetPeriods} for:item="period">
+                        <option key={period.value} value={period.value}>
+                            {period.label}
+                        </option>
+                    </template>
+                </select>
+            </div>
+
+            <!-- Product Category -->
+            <div class="form-group">
+                <label class="required">Product Category</label>
+                <select class="custom-select" onchange={handleCategoryChange}>
+                    <option value="">Select Category</option>
+                    <template for:each={categoryOptions} for:item="category">
+                        <option key={category.value} value={category.value}>
+                            {category.label}
+                        </option>
+                    </template>
+                </select>
+            </div>
+
+            <!-- Products Section -->
+            <div class="products-section">
+                <template for:each={productList} for:item="product">
+                    <div key={product.Id} class="product-card">
+                        <div class="product-layout">
+                            <div class="product-image">
+                                <lightning-formatted-rich-text value={product.Product_Image__c}>
+                                </lightning-formatted-rich-text>
+                            </div>
+                            <div class="product-details">
+                                <div class="product-title">{product.Name}</div>
+                                <div class="input-grid">
+                                    <div class="input-row">
+                                        <div class="input-group">
+                                            <label>Target Quantity</label>
+                                            <input type="number" 
+                                                   class="custom-input" 
+                                                   data-product-id={product.Id}
+                                                   onchange={handleQuantityChange}/>
+                                        </div>
+                                        <div class="input-group">
+                                            <label>Price</label>
+                                            <input type="text" 
+                                                   class="custom-input" 
+                                                   value={product.Price__c}
+                                                   readonly/>
+                                        </div>
+                                    </div>
+                                    <div class="input-row">
+                                        <div class="input-group">
+                                            <label>Target Amount</label>
+                                            <input type="text" 
+                                                   class="custom-input" 
+                                                   value={product.TargetAmount}
+                                                   readonly/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+
+            <!-- Totals Section -->
+            <div class="totals-container">
+                <!-- Current Category Totals -->
+                <div class="totals-section">
+                    <div class="totals-header">Current Category Totals</div>
+                    <div class="total-row">
+                        <span>Category Quantity:</span>
+                        <span>{currentCategoryQuantity}</span>
+                    </div>
+                    <div class="total-row">
+                        <span>Category Amount:</span>
+                        <span>₹{currentCategoryTotal}</span>
+                    </div>
+                </div>
+
+                <!-- Overall Totals -->
+                <div class="totals-section">
+                    <div class="totals-header">Overall Totals</div>
+                    <div class="total-row">
+                        <span>Total Target Quantity:</span>
+                        <span>{totalQuantity}</span>
+                    </div>
+                    <div class="total-row">
+                        <span>Total Target Amount:</span>
+                        <span>₹{totalAmount}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="button-group">
+                <button class="cancel-btn" onclick={handleCancel}>Cancel</button>
+                <button class="save-btn" onclick={handleSave}>Save</button>
+            </div>
+        </div>
+    </div>
+</template>

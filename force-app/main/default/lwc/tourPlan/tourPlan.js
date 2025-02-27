@@ -48,6 +48,10 @@ export default class TourPlan extends NavigationMixin(LightningElement) {
     @track isSearching = false;
     @track filteredVisits = [];
     @track originalVisits = [];
+    @track _startDate;
+    @track _endDate;
+    @track formattedStartDate;
+    @track formattedEndDate;
 
     constructor() {
         super();
@@ -91,8 +95,18 @@ export default class TourPlan extends NavigationMixin(LightningElement) {
             this.beatName = plan.Beat_Name__c;
             this.month = new Date(plan.Start_Date__c).toLocaleString('default', { month: 'long' });
             this.year = new Date(plan.Start_Date__c).getFullYear();
-            this.startDate = plan.Start_Date__c;
-            this.endDate = plan.End_Date__c;
+            
+            // Store original dates for functionality
+            this._startDate = plan.Start_Date__c;
+            this._endDate = plan.End_Date__c;
+            
+            // Store formatted dates for display
+            const startDate = new Date(plan.Start_Date__c);
+            const endDate = new Date(plan.End_Date__c);
+            
+            this.startDate = `${String(startDate.getDate()).padStart(2, '0')}/${String(startDate.getMonth() + 1).padStart(2, '0')}/${startDate.getFullYear()}`;
+            this.endDate = `${String(endDate.getDate()).padStart(2, '0')}/${String(endDate.getMonth() + 1).padStart(2, '0')}/${endDate.getFullYear()}`;
+            
             this.approvalStatus = plan.Approval_Status__c;
             this.userName = plan.Owner?.Name;
             this.tourPlanOwnerId = plan.OwnerId;
@@ -105,10 +119,10 @@ export default class TourPlan extends NavigationMixin(LightningElement) {
     }
 
     loadCalendarVisits() {
-        if (this.startDate && this.endDate && this.tourPlanOwnerId) {
+        if (this._startDate && this._endDate && this.tourPlanOwnerId) {
             getVisitsForCalendar({
-                startDate: this.startDate,
-                endDate: this.endDate,
+                startDate: this._startDate,
+                endDate: this._endDate,
                 tourPlanOwnerId: this.tourPlanOwnerId
             })
             .then(result => {
@@ -125,45 +139,58 @@ export default class TourPlan extends NavigationMixin(LightningElement) {
 
     processVisits(visits) {
         try {
-            console.log('Processing visits:', visits); // Debug log
+            // Create calendar for the tour plan date range regardless of visits
+            const startDate = new Date(this._startDate);
+            const endDate = new Date(this._endDate);
             const visitsByMonth = {};
             
-            visits.forEach(visit => {
-                const visitDate = new Date(visit.Planned_start_Date__c);
-                const monthYear = `${visitDate.getMonth()}-${visitDate.getFullYear()}`;
-                
-                if (!visitsByMonth[monthYear]) {
-                    visitsByMonth[monthYear] = {};
-                }
-                
-                const dayKey = visitDate.getDate();
-                if (!visitsByMonth[monthYear][dayKey]) {
-                    visitsByMonth[monthYear][dayKey] = [];
-                }
-                
-                visitsByMonth[monthYear][dayKey].push({
-                    id: visit.Id,
-                    name: visit.Customer__r.Name,
-                    scheduledTime: new Date(visit.Planned_start_Date__c).toLocaleTimeString(),
-                    visitFor: visit.Visit_for__c,
-                    status: visit.Status__c
+            // Process visits if they exist
+            if (visits && visits.length > 0) {
+                visits.forEach(visit => {
+                    const visitDate = new Date(visit.Planned_start_Date__c);
+                    const monthYear = `${visitDate.getMonth()}-${visitDate.getFullYear()}`;
+                    
+                    if (!visitsByMonth[monthYear]) {
+                        visitsByMonth[monthYear] = {};
+                    }
+                    
+                    const dayKey = visitDate.getDate();
+                    if (!visitsByMonth[monthYear][dayKey]) {
+                        visitsByMonth[monthYear][dayKey] = [];
+                    }
+                    
+                    visitsByMonth[monthYear][dayKey].push({
+                        id: visit.Id,
+                        name: visit.Customer__r.Name,
+                        scheduledTime: new Date(visit.Planned_start_Date__c).toLocaleTimeString(),
+                        visitFor: visit.Visit_for__c,
+                        status: visit.Status__c
+                    });
                 });
-            });
+            }
 
             this.calendars = [];
             
-            Object.keys(visitsByMonth).forEach(monthYear => {
-                const [month, year] = monthYear.split('-').map(Number);
-                const calendarMonth = this.createCalendarMonth(month, year, visitsByMonth[monthYear]);
+            // Generate calendars for each month in the date range
+            let currentDate = new Date(startDate);
+            while (currentDate <= endDate) {
+                const month = currentDate.getMonth();
+                const year = currentDate.getFullYear();
+                const monthYear = `${month}-${year}`;
+                
+                const calendarMonth = this.createCalendarMonth(month, year, visitsByMonth[monthYear] || {});
                 this.calendars.push(calendarMonth);
-            });
+                
+                // Move to next month
+                currentDate.setMonth(currentDate.getMonth() + 1);
+                currentDate.setDate(1);
+            }
 
-            console.log('Processed calendars:', this.calendars); // Debug log
-
-            this.selectedDayVisits = visits.map(visit => ({
+            // Store visits for modal display
+            this.selectedDayVisits = visits ? visits.map(visit => ({
                 ...visit,
                 statusClass: this.getStatusClass(visit.Status__c)
-            }));
+            })) : [];
 
         } catch (error) {
             console.error('Error processing visits:', error);
@@ -335,15 +362,6 @@ export default class TourPlan extends NavigationMixin(LightningElement) {
             console.error('Error formatting date:', error);
             return '--';
         }
-    }
-
-    get startDate() {
-        console.log('Getter Called - Start Date:', this.tourPlan?.Start_Date__c);
-        return this.formatDate(this.tourPlan?.Start_Date__c);
-    }
-
-    get endDate() {
-        return this.formatDate(this.tourPlan?.End_Date__c);
     }
 
     get approvalStatus() {
@@ -663,5 +681,14 @@ export default class TourPlan extends NavigationMixin(LightningElement) {
     get todayDate() {
         const today = new Date();
         return today.toISOString().split('T')[0];
+    }
+
+    // Add getters for formatted display
+    get startDate() {
+        return this.formattedStartDate || '--';
+    }
+
+    get endDate() {
+        return this.formattedEndDate || '--';
     }
 }

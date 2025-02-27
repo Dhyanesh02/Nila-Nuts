@@ -745,11 +745,13 @@
 
 /* Button background colors */
 .toggle-button:has(.add-icon) {
-    background: #00a1f5;  /* Blue for add */
+    background: #00a1f5;
+    /* Blue for add */
 }
 
 .toggle-button:has(.delete-icon) {
-    background: #ff3b30;  /* Red for delete */
+    background: #ff3b30;
+    /* Red for delete */
 }
 
 /* Hover states */
@@ -835,8 +837,15 @@
 
 /* Add animation */
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .placeholder-message {
@@ -849,6 +858,7 @@
         transform: translateY(20px);
         opacity: 0;
     }
+
     to {
         transform: translateY(0);
         opacity: 1;
@@ -859,15 +869,20 @@
 .slds-modal__container.add-visit-modal {
     max-width: 500px;
     width: 90%;
-    margin: 2rem auto;  /* Center horizontally */
+    margin: 2rem auto;
+    /* Center horizontally */
     background: transparent;
     border-radius: 12px;
     overflow: hidden;
     animation: slideUp 0.3s ease-out;
-    position: absolute;  /* Change to absolute */
-    left: 50%;         /* Center horizontally */
-    top: 50%;          /* Center vertically */
-    transform: translate(-50%, -50%);  /* Perfect centering */
+    position: absolute;
+    /* Change to absolute */
+    left: 50%;
+    /* Center horizontally */
+    top: 50%;
+    /* Center vertically */
+    transform: translate(-50%, -50%);
+    /* Perfect centering */
     z-index: 9999;
     display: flex;
     flex-direction: column;
@@ -882,12 +897,16 @@
 }
 
 .modal-header h2 {
-    color: white;          /* Make text white */
+    color: white;
+    /* Make text white */
     font-size: 1.25rem;
-    font-weight: 700;      /* Make text bold */
+    font-weight: 700;
+    /* Make text bold */
     margin: 0;
-    text-transform: none;  /* Remove any text transformation */
-    letter-spacing: 0.5px; /* Slight letter spacing for better readability */
+    text-transform: none;
+    /* Remove any text transformation */
+    letter-spacing: 0.5px;
+    /* Slight letter spacing for better readability */
 }
 
 /* Ensure modal is centered */
@@ -947,19 +966,24 @@
 .form-group label {
     display: block;
     font-size: 0.875rem;
-    font-weight: 700;  /* Make labels bold */
+    font-weight: 700;
+    /* Make labels bold */
     margin-bottom: 0.5rem;
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
 
 /* Specific label colors */
-.form-group:nth-child(1) label {  /* SELECT DATE */
-    color: #2196f3;  /* Blue color */
+.form-group:nth-child(1) label {
+    /* SELECT DATE */
+    color: #2196f3;
+    /* Blue color */
 }
 
-.form-group:nth-child(2) label {  /* VISIT TYPE */
-    color: #1976d2;  /* Darker blue */
+.form-group:nth-child(2) label {
+    /* VISIT TYPE */
+    color: #1976d2;
+    /* Darker blue */
 }
 
 /* Input Fields - Enhanced */
@@ -969,7 +993,8 @@
     padding: 0.75rem;
     border: 1px solid #e0e3ec;
     font-size: 0.875rem;
-    font-weight: 500;  /* Make text slightly bold */
+    font-weight: 500;
+    /* Make text slightly bold */
     color: #16325c;
     background: white;
     transition: all 0.2s ease;
@@ -1002,7 +1027,8 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    color: #4caf50 !important;  /* Green color for search label */
+    color: #4caf50 !important;
+    /* Green color for search label */
 }
 
 .search-icon {
@@ -1017,7 +1043,8 @@
 .search-input {
     width: 100%;
     padding: 0.75rem;
-    padding-left: 2.5rem;  /* Space for the icon */
+    padding-left: 2.5rem;
+    /* Space for the icon */
     border: 1px solid #e0e3ec;
     border-radius: 8px;
     font-size: 0.875rem;
@@ -1059,13 +1086,19 @@
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 /* Adjust visit cards container when search is active */
 .visits-cards-container.with-search {
-    max-height: calc(45vh - 60px);  /* Reduce height to accommodate search */
+    max-height: calc(45vh - 60px);
+    /* Reduce height to accommodate search */
 }
 
 /* Selected Accounts Modal Specific Styles */
@@ -1226,4 +1259,89 @@
     -webkit-backdrop-filter: blur(4px);
     backdrop-filter: blur(4px);
     z-index: 9001;
+}
+
+/* Loading Overlay */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    -webkit-backdrop-filter: blur(3px);
+    backdrop-filter: blur(3px);
+}
+
+.loading-spinner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 2rem;
+    border-radius: 12px;
+    background: white;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.spinner-container {
+    width: 50px;
+    height: 50px;
+}
+
+.spinner {
+    width: 100%;
+    height: 100%;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #0176d3;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+.loading-text {
+    color: #0176d3;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+/* Refresh Animation */
+.refresh-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    -webkit-backdrop-filter: blur(3px);
+    backdrop-filter: blur(3px);
+}
+
+.refresh-spinner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 2rem;
+    border-radius: 12px;
+    background: white;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.refresh-text {
+    color: #0176d3;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }

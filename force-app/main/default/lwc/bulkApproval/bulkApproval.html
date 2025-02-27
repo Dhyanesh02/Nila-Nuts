@@ -1,0 +1,66 @@
+<template>
+    <div class="approval-container">
+        <div class="filter-section">
+            <div class="filter-group">
+                <label>Approval Related to</label>
+                <select class="custom-select" onchange={handleRelatedToChange}>
+                    <template for:each={relatedToOptions} for:item="option">
+                        <option key={option.value} value={option.value}>{option.label}</option>
+                    </template>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Submitted by</label>
+                <select class="custom-select" onchange={handleSubmitterChange}>
+                    <template for:each={userOptions} for:item="user">
+                        <option key={user.value} value={user.value}>{user.label}</option>
+                    </template>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Submitted Date</label>
+                <input type="date" class="custom-input" onchange={handleDateChange} />
+            </div>
+        </div>
+
+        <div class="button-group">
+            <button class="btn btn-approve" onclick={handleApprove}>Approve</button>
+            <button class="btn btn-reject" onclick={handleReject}>Reject</button>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="checkbox-col">
+                            <input type="checkbox" onchange={handleSelectAll} />
+                        </th>
+                        <th>Name</th>
+                        <th>Related to</th>
+                        <th>Submitted by</th>
+                        <th>Submitted Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template for:each={formattedApprovalRequests} for:item="request">
+                        <tr key={request.id}>
+                            <td>
+                                <input type="checkbox" 
+                                       data-id={request.id} 
+                                       onchange={handleRowSelection} />
+                            </td>
+                            <td>
+                                <a href="#" onclick={navigateToRecord} data-recordid={request.targetObjectId} class="record-link">
+                                    {request.recordName}
+                                </a>
+                            </td>
+                            <td>{request.relatedTo}</td>
+                            <td>{request.submittedBy}</td>
+                            <td>{request.formattedDate}</td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</template>
