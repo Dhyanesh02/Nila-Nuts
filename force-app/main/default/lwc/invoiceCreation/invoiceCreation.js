@@ -20,9 +20,10 @@ export default class InvoiceCreation extends LightningElement {
     isLoading = false;
     @track dueDate;
     @track showReviewModal = false;
-    @track isReviewed = false;
     @track selectedItemsList = [];
     @track totalAmount = 0;
+    @track dueDateApi;
+    @track isReviewed = false;
 
     connectedCallback() {
         this.loadCategories();
@@ -48,6 +49,7 @@ export default class InvoiceCreation extends LightningElement {
         this.selectedFamily = selectedFamily;
         if (selectedFamily) {
             this.loadProducts(selectedFamily);
+            this.isReviewed = false;
         } else {
             this.productList = [];
         }
@@ -86,12 +88,14 @@ export default class InvoiceCreation extends LightningElement {
         const productId = event.target.dataset.productId;
         const quantity = parseInt(event.target.value);
         this.updateProductCalculations(productId, quantity, 'quantity');
+        this.isReviewed = false;
     }
 
     handleDiscountChange(event) {
         const productId = event.target.dataset.productId;
-        const discount = parseFloat(event.target.value) ;
+        const discount = parseFloat(event.target.value);
         this.updateProductCalculations(productId, discount, 'discount');
+        this.isReviewed = false;
     }
 
     updateProductCalculations(productId, value, field) {
@@ -133,7 +137,9 @@ export default class InvoiceCreation extends LightningElement {
             event.target.value = this.minDate;
             return;
         }
-        // Convert the date to dd/mm/yyyy format for display
+        // Store the original date value for API calls
+        this.dueDateApi = selectedDate;
+        // Convert the date to dd/mm/yyyy format for display only
         const dateObj = new Date(selectedDate);
         this.dueDate = dateObj.toLocaleDateString('en-GB');
     }
@@ -156,6 +162,7 @@ export default class InvoiceCreation extends LightningElement {
             .reduce((sum, product) => sum + parseFloat(product.Total || 0), 0)
             .toFixed(2);
 
+        this.isReviewed = true;
         this.showReviewModal = true;
     }
 
@@ -163,15 +170,9 @@ export default class InvoiceCreation extends LightningElement {
         this.showReviewModal = false;
     }
 
-    handleReviewConfirm() {
-        this.isReviewed = true;
-        this.showReviewModal = false;
-        this.showToast('Success', 'Review confirmed. You can now save the invoice.', 'success');
-    }
-
     handleSave() {
         if (!this.isReviewed) {
-            this.showToast('Error', 'Please review your invoice first', 'error');
+            this.showToast('Error', 'Please review the invoice before saving', 'error');
             return;
         }
 
@@ -198,7 +199,7 @@ export default class InvoiceCreation extends LightningElement {
             contactId: this.contactId,
             billToContact: this.billToContact,
             totalAmount: parseFloat(this.totalAmount),
-            dueDate: this.dueDate,
+            dueDate: this.dueDateApi, // Use the original date format for API
             items: cleanedItems 
         })
         .then(() => {
@@ -224,9 +225,5 @@ export default class InvoiceCreation extends LightningElement {
 
     handleCancel() {
         this.dispatchEvent(new CustomEvent('cancel'));
-    }
-
-    get notReviewed() {
-        return !this.isReviewed;
     }
 }
